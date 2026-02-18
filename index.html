@@ -2,8 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Empanadas - Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin Empanadas - Futurista</title>
     <style>
         * {
             margin: 0;
@@ -15,7 +15,7 @@
         body {
             background: linear-gradient(135deg, #ff0000 0%, #ffffff 50%, #ff0000 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 10px;
             position: relative;
             overflow-x: hidden;
         }
@@ -23,112 +23,158 @@
         /* Efectos futuristas */
         body::before {
             content: '';
-            position: absolute;
+            position: fixed;
             top: -50%;
             left: -50%;
             width: 200%;
             height: 200%;
             background: radial-gradient(circle, rgba(255,255,255,0.3) 1px, transparent 1px);
-            background-size: 50px 50px;
-            animation: glitter 20s linear infinite;
+            background-size: 30px 30px;
+            animation: glitter 15s linear infinite;
             pointer-events: none;
         }
 
         @keyframes glitter {
             0% { transform: translate(0, 0) rotate(0deg); }
-            100% { transform: translate(50px, 50px) rotate(10deg); }
+            100% { transform: translate(30px, 30px) rotate(5deg); }
         }
 
         .container {
-            max-width: 800px;
+            max-width: 100%;
             margin: 0 auto;
             position: relative;
             z-index: 1;
+            padding: 0 5px;
+        }
+
+        /* Header con botón tienda */
+        .header-admin {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 15px;
+            border-radius: 50px;
+            border: 2px solid white;
         }
 
         h1 {
-            text-align: center;
             color: white;
-            font-size: 3em;
-            margin-bottom: 30px;
+            font-size: clamp(1.5em, 5vw, 2.5em);
             text-shadow: 0 0 20px rgba(255,0,0,0.8), 0 0 40px rgba(255,255,255,0.5);
-            letter-spacing: 5px;
+            letter-spacing: 2px;
             animation: neon 1.5s ease-in-out infinite alternate;
+            line-height: 1.2;
         }
 
         @keyframes neon {
             from { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff0000; }
-            to { text-shadow: 0 0 20px #fff, 0 0 30px #ff4d4d, 0 0 40px #ff0000; }
+            to { text-shadow: 0 0 15px #fff, 0 0 25px #ff4d4d, 0 0 35px #ff0000; }
+        }
+
+        /* Botón tienda futurista */
+        .btn-shop {
+            background: linear-gradient(45deg, #ff0000, #ffffff);
+            color: #ff0000;
+            border: 3px solid white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: clamp(1em, 4vw, 1.3em);
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 0 30px rgba(255,0,0,0.5);
+            animation: pulse 2s infinite;
+        }
+
+        .btn-shop:hover {
+            transform: scale(1.1);
+            background: linear-gradient(45deg, #ffffff, #ff0000);
+            color: white;
+            box-shadow: 0 0 50px rgba(255,255,255,0.8);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .form-card {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 0, 0, 0.5);
+            border: 3px solid rgba(255, 0, 0, 0.5);
             border-radius: 30px;
-            padding: 30px;
+            padding: 20px;
             box-shadow: 0 20px 50px rgba(255,0,0,0.3), 0 0 0 2px rgba(255,255,255,0.5) inset;
             margin-bottom: 30px;
         }
 
         .form-title {
             color: #ff0000;
-            font-size: 2em;
-            margin-bottom: 20px;
+            font-size: clamp(1.5em, 5vw, 2em);
+            margin-bottom: 15px;
             border-bottom: 3px solid #ff0000;
             padding-bottom: 10px;
             display: inline-block;
         }
 
-        .input-group {
-            margin-bottom: 20px;
+        /* Selector de cámara */
+        .camera-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
         }
 
-        label {
-            display: block;
-            color: #ff0000;
-            font-weight: bold;
-            margin-bottom: 8px;
-            font-size: 1.2em;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 15px;
+        .camera-btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px;
             border: 2px solid #ff0000;
-            border-radius: 15px;
-            font-size: 1.1em;
-            background: rgba(255,255,255,0.9);
+            background: white;
+            color: #ff0000;
+            border-radius: 50px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
             transition: all 0.3s;
         }
 
-        input:focus, textarea:focus {
-            outline: none;
-            box-shadow: 0 0 20px rgba(255,0,0,0.5);
-            transform: scale(1.02);
+        .camera-btn.active {
+            background: #ff0000;
+            color: white;
+            box-shadow: 0 0 20px #ff0000;
         }
 
         .camera-section {
             background: linear-gradient(45deg, #ff0000, #ffffff);
-            padding: 20px;
-            border-radius: 20px;
+            padding: 15px;
+            border-radius: 25px;
             margin-bottom: 20px;
         }
 
-        .camera-preview {
+        .camera-container {
+            position: relative;
             width: 100%;
-            max-width: 400px;
-            margin: 0 auto;
-            border: 4px solid white;
             border-radius: 20px;
             overflow: hidden;
+            border: 4px solid white;
             box-shadow: 0 0 30px rgba(255,0,0,0.5);
+            background: #000;
+            aspect-ratio: 4/3;
         }
 
         #video, #canvas {
             width: 100%;
+            height: 100%;
+            object-fit: cover;
             display: block;
         }
 
@@ -141,17 +187,19 @@
         }
 
         .btn {
-            padding: 15px 30px;
+            padding: 15px 20px;
             border: none;
             border-radius: 50px;
-            font-size: 1.2em;
+            font-size: clamp(1em, 4vw, 1.2em);
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             position: relative;
             overflow: hidden;
+            flex: 1;
+            min-width: 140px;
         }
 
         .btn::before {
@@ -191,18 +239,63 @@
             color: white;
         }
 
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            color: #ff0000;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: clamp(1em, 4vw, 1.2em);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ff0000;
+            border-radius: 15px;
+            font-size: 1em;
+            background: rgba(255,255,255,0.9);
+            transition: all 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            box-shadow: 0 0 20px rgba(255,0,0,0.5);
+            transform: scale(1.02);
+        }
+
+        .products-section {
             margin-top: 30px;
         }
 
-        .product-card {
-            background: rgba(255,255,255,0.9);
+        .products-section h2 {
+            color: white;
+            font-size: clamp(1.5em, 5vw, 2em);
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px red;
+            background: rgba(255,0,0,0.3);
+            padding: 15px;
+            border-radius: 50px;
+            text-align: center;
             backdrop-filter: blur(5px);
-            border: 2px solid #ff0000;
-            border-radius: 20px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .product-card {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(5px);
+            border: 3px solid #ff0000;
+            border-radius: 25px;
             padding: 15px;
             text-align: center;
             transition: all 0.3s;
@@ -215,13 +308,13 @@
         }
 
         .product-card:hover {
-            transform: translateY(-10px) scale(1.05);
-            box-shadow: 0 20px 40px rgba(255,0,0,0.4);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(255,0,0,0.4);
         }
 
         .product-image {
             width: 100%;
-            height: 200px;
+            height: 180px;
             object-fit: cover;
             border-radius: 15px;
             border: 3px solid #ff0000;
@@ -238,45 +331,108 @@
             color: white;
             background: #ff0000;
             display: inline-block;
-            padding: 5px 20px;
+            padding: 8px 25px;
             border-radius: 50px;
             font-size: 1.3em;
             margin: 10px 0;
+            border: 2px solid white;
         }
 
         .product-concept {
             color: #333;
             font-style: italic;
+            margin: 10px 0;
+            font-size: 0.95em;
         }
 
         .delete-btn {
             background: #ff0000;
             color: white;
             border: none;
-            padding: 8px 20px;
+            padding: 10px 25px;
             border-radius: 50px;
             cursor: pointer;
             margin-top: 10px;
+            font-weight: bold;
+            border: 2px solid white;
+            width: 100%;
+            font-size: 1.1em;
+        }
+
+        /* Vista previa de foto */
+        .photo-preview {
+            position: relative;
+            margin-top: 10px;
+        }
+
+        .photo-preview img {
+            width: 100%;
+            border-radius: 15px;
+            border: 3px solid #ff0000;
+        }
+
+        /* Responsive para móviles */
+        @media (max-width: 480px) {
+            .header-admin {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .btn-shop {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .camera-controls {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-card {
+                padding: 15px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🍢 ADMIN EMPANADAS FUTURISTAS 🍢</h1>
-        
+        <!-- Header con botón a tienda -->
+        <div class="header-admin">
+            <h1>⚡ ADMIN PANEL ⚡</h1>
+            <a href="tienda.html" class="btn-shop" target="_blank">
+                <span>🛒</span> VER TIENDA <span>➡️</span>
+            </a>
+        </div>
+
         <div class="form-card">
             <h2 class="form-title">📸 SUBIR NUEVA EMPANADA</h2>
             
+            <!-- Selector de cámara trasera/frontal -->
+            <div class="camera-selector">
+                <button class="camera-btn active" onclick="switchCamera('environment')" id="btnBack">📷 TRASERA</button>
+                <button class="camera-btn" onclick="switchCamera('user')" id="btnFront">🤳 FRONTAL</button>
+            </div>
+            
             <div class="camera-section">
-                <div class="camera-preview">
-                    <video id="video" autoplay></video>
+                <div class="camera-container" id="cameraContainer">
+                    <video id="video" autoplay playsinline></video>
                     <canvas id="canvas" style="display: none;"></canvas>
                 </div>
                 
                 <div class="camera-controls">
-                    <button class="btn btn-red" onclick="startCamera()">📷 ACTIVAR CÁMARA</button>
+                    <button class="btn btn-red" onclick="startCamera()">📷 ACTIVAR</button>
                     <button class="btn btn-white" onclick="takePhoto()">📸 TOMAR FOTO</button>
                 </div>
+
+                <!-- Preview de la foto tomada -->
+                <div id="photoPreview" class="photo-preview" style="display: none;"></div>
             </div>
 
             <div class="input-group">
@@ -286,7 +442,7 @@
 
             <div class="input-group">
                 <label>💰 PRECIO</label>
-                <input type="number" id="price" placeholder="Ej: 2.50">
+                <input type="number" id="price" placeholder="Ej: 2.50" step="0.01" min="0">
             </div>
 
             <div class="input-group">
@@ -297,8 +453,10 @@
             <button class="btn btn-red" onclick="saveProduct()" style="width: 100%;">💾 GUARDAR PRODUCTO</button>
         </div>
 
-        <h2 style="color: white; text-shadow: 0 0 10px red;">📦 PRODUCTOS DISPONIBLES</h2>
-        <div id="productsList" class="products-grid"></div>
+        <div class="products-section">
+            <h2>📦 PRODUCTOS DISPONIBLES</h2>
+            <div id="productsList" class="products-grid"></div>
+        </div>
     </div>
 
     <script>
@@ -306,40 +464,106 @@
         let video = document.getElementById('video');
         let canvas = document.getElementById('canvas');
         let currentPhoto = null;
+        let currentFacingMode = 'environment'; // 'environment' = trasera, 'user' = frontal
 
-        // Iniciar cámara
+        // Iniciar cámara con la selección actual
         async function startCamera() {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                if (video.srcObject) {
+                    video.srcObject.getTracks().forEach(track => track.stop());
+                }
+                
+                const constraints = {
+                    video: {
+                        facingMode: currentFacingMode,
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
+                    }
+                };
+                
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
                 video.srcObject = stream;
+                
+                // Actualizar botones activos
+                document.querySelectorAll('.camera-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                if (currentFacingMode === 'environment') {
+                    document.getElementById('btnBack').classList.add('active');
+                } else {
+                    document.getElementById('btnFront').classList.add('active');
+                }
+                
+                // Ocultar preview cuando se activa cámara
+                document.getElementById('photoPreview').style.display = 'none';
+                video.style.display = 'block';
+                
             } catch (err) {
-                alert('Error al acceder a la cámara: ' + err);
+                alert('Error al acceder a la cámara: ' + err + '\n\nAsegúrate de haber dado permisos.');
             }
+        }
+
+        // Cambiar entre cámaras
+        async function switchCamera(mode) {
+            currentFacingMode = mode;
+            await startCamera();
         }
 
         // Tomar foto
         function takePhoto() {
+            if (!video.srcObject) {
+                alert('⚠️ Primero activa la cámara');
+                return;
+            }
+            
+            // Ajustar canvas al tamaño del video
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
-            canvas.getContext('2d').drawImage(video, 0, 0);
-            currentPhoto = canvas.toDataURL('image/jpeg');
+            
+            // Dibujar la imagen del video en el canvas
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            // Convertir a formato base64
+            currentPhoto = canvas.toDataURL('image/jpeg', 0.9);
             
             // Mostrar preview
-            let img = document.createElement('img');
-            img.src = currentPhoto;
-            img.style.width = '100%';
-            document.querySelector('.camera-preview').innerHTML = '';
-            document.querySelector('.camera-preview').appendChild(img);
+            const preview = document.getElementById('photoPreview');
+            preview.innerHTML = `<img src="${currentPhoto}" style="width: 100%; border-radius: 15px;">`;
+            preview.style.display = 'block';
+            
+            // Ocultar video temporalmente
+            video.style.display = 'none';
+            
+            // Animación de flash
+            document.querySelector('.camera-container').style.animation = 'flash 0.3s';
+            setTimeout(() => {
+                document.querySelector('.camera-container').style.animation = '';
+            }, 300);
         }
 
         // Guardar producto
         function saveProduct() {
-            let name = document.getElementById('name').value;
+            let name = document.getElementById('name').value.trim();
             let price = document.getElementById('price').value;
-            let concept = document.getElementById('concept').value;
+            let concept = document.getElementById('concept').value.trim();
 
-            if (!name || !price || !concept || !currentPhoto) {
-                alert('⚠️ Completa todos los campos y toma una foto');
+            if (!name) {
+                alert('⚠️ Escribe el nombre de la empanada');
+                return;
+            }
+            
+            if (!price || price <= 0) {
+                alert('⚠️ Ingresa un precio válido');
+                return;
+            }
+            
+            if (!concept) {
+                alert('⚠️ Describe los ingredientes');
+                return;
+            }
+            
+            if (!currentPhoto) {
+                alert('⚠️ Toma una foto de la empanada');
                 return;
             }
 
@@ -360,17 +584,19 @@
             document.getElementById('concept').value = '';
             currentPhoto = null;
             
-            // Reiniciar cámara
-            document.querySelector('.camera-preview').innerHTML = '<video id="video" autoplay></video>';
-            video = document.getElementById('video');
-            startCamera();
+            // Limpiar preview y mostrar video
+            document.getElementById('photoPreview').innerHTML = '';
+            document.getElementById('photoPreview').style.display = 'none';
+            video.style.display = 'block';
             
             displayProducts();
+            
+            // Feedback
             alert('✅ Producto guardado con éxito');
             
-            // Actualizar tienda si está abierta
-            if (window.opener) {
-                window.opener.location.reload();
+            // Vibrar si es móvil
+            if (navigator.vibrate) {
+                navigator.vibrate(200);
             }
         }
 
@@ -379,11 +605,16 @@
             let list = document.getElementById('productsList');
             list.innerHTML = '';
             
-            products.forEach(product => {
+            if (products.length === 0) {
+                list.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: white; font-size: 1.5em; padding: 50px;">📭 No hay productos aún</div>';
+                return;
+            }
+            
+            products.sort((a, b) => b.id - a.id).forEach(product => {
                 let card = document.createElement('div');
                 card.className = 'product-card';
                 card.innerHTML = `
-                    <img src="${product.image}" class="product-image">
+                    <img src="${product.image}" class="product-image" loading="lazy">
                     <div class="product-name">${product.name}</div>
                     <div class="product-price">$${product.price.toFixed(2)}</div>
                     <div class="product-concept">${product.concept}</div>
@@ -399,12 +630,39 @@
                 products = products.filter(p => p.id !== id);
                 localStorage.setItem('empanadas', JSON.stringify(products));
                 displayProducts();
+                
+                if (navigator.vibrate) {
+                    navigator.vibrate(100);
+                }
             }
         }
 
         // Inicializar
         displayProducts();
-        startCamera();
+        
+        // Auto-iniciar cámara trasera al cargar
+        window.addEventListener('load', () => {
+            setTimeout(startCamera, 500);
+        });
+
+        // Pausar cámara cuando no se usa (ahorra batería)
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && video.srcObject) {
+                video.srcObject.getTracks().forEach(track => track.stop());
+            } else if (!document.hidden) {
+                startCamera();
+            }
+        });
+
+        // Animación CSS para flash
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes flash {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.5; background: white; }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
