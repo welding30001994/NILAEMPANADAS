@@ -3,13 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Admin Nila Empanadas</title>
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+    <title>Admin Empanadas - Futurista</title>
     <style>
-        /* MISMO ESTILO ANTERIOR - CONSÉRVALO IGUAL */
         * {
             margin: 0;
             padding: 0;
@@ -25,6 +20,7 @@
             overflow-x: hidden;
         }
 
+        /* Efectos futuristas */
         body::before {
             content: '';
             position: fixed;
@@ -51,6 +47,7 @@
             padding: 0 5px;
         }
 
+        /* Header con botón tienda */
         .header-admin {
             display: flex;
             justify-content: space-between;
@@ -79,6 +76,7 @@
             to { text-shadow: 0 0 15px #fff, 0 0 25px #ff4d4d, 0 0 35px #ff0000; }
         }
 
+        /* Botón tienda futurista */
         .btn-shop {
             background: linear-gradient(45deg, #ff0000, #ffffff);
             color: #ff0000;
@@ -127,6 +125,7 @@
             display: inline-block;
         }
 
+        /* Selector de cámara */
         .camera-selector {
             display: flex;
             gap: 10px;
@@ -270,40 +269,6 @@
             transform: scale(1.02);
         }
 
-        .loading {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            color: white;
-        }
-
-        .loading.active {
-            display: flex;
-        }
-
-        .spinner {
-            border: 5px solid white;
-            border-top: 5px solid #ff0000;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
         .products-section {
             margin-top: 30px;
         }
@@ -394,10 +359,7 @@
             font-size: 1.1em;
         }
 
-        .delete-btn:hover {
-            background: #990000;
-        }
-
+        /* Vista previa de foto */
         .photo-preview {
             position: relative;
             margin-top: 10px;
@@ -409,6 +371,7 @@
             border: 3px solid #ff0000;
         }
 
+        /* Responsive para móviles */
         @media (max-width: 480px) {
             .header-admin {
                 flex-direction: column;
@@ -439,15 +402,10 @@
     </style>
 </head>
 <body>
-    <!-- Loading spinner -->
-    <div class="loading" id="loading">
-        <div class="spinner"></div>
-        <div id="loadingMessage">Subiendo producto...</div>
-    </div>
-
     <div class="container">
+        <!-- Header con botón a tienda -->
         <div class="header-admin">
-            <h1>⚡ NILA ADMIN ⚡</h1>
+            <h1>⚡ ADMIN PANEL ⚡</h1>
             <a href="tienda.html" class="btn-shop" target="_blank">
                 <span>🛒</span> VER TIENDA <span>➡️</span>
             </a>
@@ -456,6 +414,7 @@
         <div class="form-card">
             <h2 class="form-title">📸 SUBIR NUEVA EMPANADA</h2>
             
+            <!-- Selector de cámara trasera/frontal -->
             <div class="camera-selector">
                 <button class="camera-btn active" onclick="switchCamera('environment')" id="btnBack">📷 TRASERA</button>
                 <button class="camera-btn" onclick="switchCamera('user')" id="btnFront">🤳 FRONTAL</button>
@@ -472,6 +431,7 @@
                     <button class="btn btn-white" onclick="takePhoto()">📸 TOMAR FOTO</button>
                 </div>
 
+                <!-- Preview de la foto tomada -->
                 <div id="photoPreview" class="photo-preview" style="display: none;"></div>
             </div>
 
@@ -500,37 +460,13 @@
     </div>
 
     <script>
-        // 🔥 CONFIGURACIÓN DE FIREBASE - REEMPLAZA CON TUS DATOS 🔥
-        const firebaseConfig = {
-            apiKey: "TU_API_KEY",
-            authDomain: "TU_AUTH_DOMAIN",
-            projectId: "TU_PROJECT_ID",
-            storageBucket: "TU_STORAGE_BUCKET",
-            messagingSenderId: "TU_MESSAGING_SENDER_ID",
-            appId: "TU_APP_ID"
-        };
-
-        // Inicializar Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const storage = firebase.storage();
-
+        let products = JSON.parse(localStorage.getItem('empanadas')) || [];
         let video = document.getElementById('video');
         let canvas = document.getElementById('canvas');
         let currentPhoto = null;
-        let currentFacingMode = 'environment';
+        let currentFacingMode = 'environment'; // 'environment' = trasera, 'user' = frontal
 
-        // Mostrar/ocultar loading
-        function showLoading(message) {
-            document.getElementById('loadingMessage').textContent = message || 'Procesando...';
-            document.getElementById('loading').classList.add('active');
-        }
-
-        function hideLoading() {
-            document.getElementById('loading').classList.remove('active');
-        }
-
-        // Iniciar cámara
+        // Iniciar cámara con la selección actual
         async function startCamera() {
             try {
                 if (video.srcObject) {
@@ -548,6 +484,7 @@
                 const stream = await navigator.mediaDevices.getUserMedia(constraints);
                 video.srcObject = stream;
                 
+                // Actualizar botones activos
                 document.querySelectorAll('.camera-btn').forEach(btn => {
                     btn.classList.remove('active');
                 });
@@ -557,18 +494,19 @@
                     document.getElementById('btnFront').classList.add('active');
                 }
                 
+                // Ocultar preview cuando se activa cámara
                 document.getElementById('photoPreview').style.display = 'none';
                 video.style.display = 'block';
                 
             } catch (err) {
-                alert('Error al acceder a la cámara: ' + err);
+                alert('Error al acceder a la cámara: ' + err + '\n\nAsegúrate de haber dado permisos.');
             }
         }
 
-        // Cambiar cámara
-        function switchCamera(mode) {
+        // Cambiar entre cámaras
+        async function switchCamera(mode) {
             currentFacingMode = mode;
-            startCamera();
+            await startCamera();
         }
 
         // Tomar foto
@@ -578,25 +516,33 @@
                 return;
             }
             
+            // Ajustar canvas al tamaño del video
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
+            
+            // Dibujar la imagen del video en el canvas
             canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
             
+            // Convertir a formato base64
             currentPhoto = canvas.toDataURL('image/jpeg', 0.9);
             
+            // Mostrar preview
             const preview = document.getElementById('photoPreview');
             preview.innerHTML = `<img src="${currentPhoto}" style="width: 100%; border-radius: 15px;">`;
             preview.style.display = 'block';
+            
+            // Ocultar video temporalmente
             video.style.display = 'none';
             
+            // Animación de flash
             document.querySelector('.camera-container').style.animation = 'flash 0.3s';
             setTimeout(() => {
                 document.querySelector('.camera-container').style.animation = '';
             }, 300);
         }
 
-        // Guardar producto en Firebase
-        async function saveProduct() {
+        // Guardar producto
+        function saveProduct() {
             let name = document.getElementById('name').value.trim();
             let price = document.getElementById('price').value;
             let concept = document.getElementById('concept').value.trim();
@@ -621,84 +567,41 @@
                 return;
             }
 
-            showLoading('Subiendo imagen...');
+            let product = {
+                id: Date.now(),
+                name: name,
+                price: parseFloat(price),
+                concept: concept,
+                image: currentPhoto
+            };
 
-            try {
-                // Convertir base64 a blob
-                const response = await fetch(currentPhoto);
-                const blob = await response.blob();
-                
-                // Crear nombre único para la imagen
-                const imageName = `empanadas/${Date.now()}.jpg`;
-                
-                // Subir imagen a Storage
-                const storageRef = storage.ref().child(imageName);
-                await storageRef.put(blob);
-                
-                // Obtener URL de la imagen
-                const imageUrl = await storageRef.getDownloadURL();
-
-                showLoading('Guardando producto...');
-
-                // Guardar datos en Firestore
-                await db.collection('products').add({
-                    name: name,
-                    price: parseFloat(price),
-                    concept: concept,
-                    imageUrl: imageUrl,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-
-                // Limpiar formulario
-                document.getElementById('name').value = '';
-                document.getElementById('price').value = '';
-                document.getElementById('concept').value = '';
-                document.getElementById('photoPreview').innerHTML = '';
-                document.getElementById('photoPreview').style.display = 'none';
-                video.style.display = 'block';
-                currentPhoto = null;
-
-                hideLoading();
-                alert('✅ Producto guardado con éxito');
-                
-                // Recargar productos
-                loadProducts();
-
-                if (navigator.vibrate) {
-                    navigator.vibrate(200);
-                }
-
-            } catch (error) {
-                hideLoading();
-                alert('Error al guardar: ' + error.message);
-                console.error(error);
-            }
-        }
-
-        // Cargar productos desde Firebase
-        async function loadProducts() {
-            try {
-                const snapshot = await db.collection('products')
-                    .orderBy('createdAt', 'desc')
-                    .get();
-                
-                const products = [];
-                snapshot.forEach(doc => {
-                    products.push({
-                        id: doc.id,
-                        ...doc.data()
-                    });
-                });
-
-                displayProducts(products);
-            } catch (error) {
-                console.error('Error cargando productos:', error);
-                alert('Error al cargar productos');
+            products.push(product);
+            localStorage.setItem('empanadas', JSON.stringify(products));
+            
+            // Limpiar formulario
+            document.getElementById('name').value = '';
+            document.getElementById('price').value = '';
+            document.getElementById('concept').value = '';
+            currentPhoto = null;
+            
+            // Limpiar preview y mostrar video
+            document.getElementById('photoPreview').innerHTML = '';
+            document.getElementById('photoPreview').style.display = 'none';
+            video.style.display = 'block';
+            
+            displayProducts();
+            
+            // Feedback
+            alert('✅ Producto guardado con éxito');
+            
+            // Vibrar si es móvil
+            if (navigator.vibrate) {
+                navigator.vibrate(200);
             }
         }
 
         // Mostrar productos
-        function displayProducts(products) {
+        function displayProducts() {
             let list = document.getElementById('productsList');
             list.innerHTML = '';
             
@@ -707,60 +610,42 @@
                 return;
             }
             
-            products.forEach(product => {
+            products.sort((a, b) => b.id - a.id).forEach(product => {
                 let card = document.createElement('div');
                 card.className = 'product-card';
                 card.innerHTML = `
-                    <img src="${product.imageUrl}" class="product-image" loading="lazy">
+                    <img src="${product.image}" class="product-image" loading="lazy">
                     <div class="product-name">${product.name}</div>
                     <div class="product-price">$${product.price.toFixed(2)}</div>
                     <div class="product-concept">${product.concept}</div>
-                    <button class="delete-btn" onclick="deleteProduct('${product.id}', '${product.imageUrl}')">🗑️ ELIMINAR</button>
+                    <button class="delete-btn" onclick="deleteProduct(${product.id})">🗑️ ELIMINAR</button>
                 `;
                 list.appendChild(card);
             });
         }
 
         // Eliminar producto
-        async function deleteProduct(productId, imageUrl) {
-            if (!confirm('¿Eliminar esta empanada? Esto afectará a la tienda.')) {
-                return;
-            }
-
-            showLoading('Eliminando...');
-
-            try {
-                // Eliminar imagen de Storage
-                if (imageUrl) {
-                    const imageRef = storage.refFromURL(imageUrl);
-                    await imageRef.delete();
-                }
-
-                // Eliminar documento de Firestore
-                await db.collection('products').doc(productId).delete();
-
-                hideLoading();
-                alert('✅ Producto eliminado');
-                loadProducts();
-
+        function deleteProduct(id) {
+            if (confirm('¿Eliminar esta empanada?')) {
+                products = products.filter(p => p.id !== id);
+                localStorage.setItem('empanadas', JSON.stringify(products));
+                displayProducts();
+                
                 if (navigator.vibrate) {
                     navigator.vibrate(100);
                 }
-
-            } catch (error) {
-                hideLoading();
-                alert('Error al eliminar: ' + error.message);
-                console.error(error);
             }
         }
 
         // Inicializar
+        displayProducts();
+        
+        // Auto-iniciar cámara trasera al cargar
         window.addEventListener('load', () => {
-            loadProducts();
             setTimeout(startCamera, 500);
         });
 
-        // Pausar cámara
+        // Pausar cámara cuando no se usa (ahorra batería)
         document.addEventListener('visibilitychange', () => {
             if (document.hidden && video.srcObject) {
                 video.srcObject.getTracks().forEach(track => track.stop());
@@ -769,7 +654,7 @@
             }
         });
 
-        // Animación flash
+        // Animación CSS para flash
         const style = document.createElement('style');
         style.textContent = `
             @keyframes flash {
