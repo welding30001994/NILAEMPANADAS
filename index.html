@@ -9,7 +9,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
     <style>
-        /* MISMO ESTILO ANTERIOR - CONSÉRVALO IGUAL */
         * {
             margin: 0;
             padding: 0;
@@ -500,14 +499,16 @@
     </div>
 
     <script>
-        // 🔥 CONFIGURACIÓN DE FIREBASE - REEMPLAZA CON TUS DATOS 🔥
+        // 🔥 TU CONFIGURACIÓN DE FIREBASE 🔥
         const firebaseConfig = {
-            apiKey: "TU_API_KEY",
-            authDomain: "TU_AUTH_DOMAIN",
-            projectId: "TU_PROJECT_ID",
-            storageBucket: "TU_STORAGE_BUCKET",
-            messagingSenderId: "TU_MESSAGING_SENDER_ID",
-            appId: "TU_APP_ID"
+            apiKey: "AIzaSyB1Cs2os3tTfrMbYSAmDeJAGnP4tTtsFdw",
+            authDomain: "beaver-trading.firebaseapp.com",
+            databaseURL: "https://beaver-trading-default-rtdb.firebaseio.com",
+            projectId: "beaver-trading",
+            storageBucket: "beaver-trading.firebasestorage.app",
+            messagingSenderId: "926610131904",
+            appId: "1:926610131904:web:c147bd337bd12b4d085625",
+            measurementId: "G-1K51WWF2ZJ"
         };
 
         // Inicializar Firebase
@@ -693,7 +694,6 @@
                 displayProducts(products);
             } catch (error) {
                 console.error('Error cargando productos:', error);
-                alert('Error al cargar productos');
             }
         }
 
