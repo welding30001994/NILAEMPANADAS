@@ -38,6 +38,13 @@
         .carrito-titulo {
             color: #ff0000;
             font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .carrito-icono {
+            font-size: 1.8rem;
         }
 
         .carrito-contenido {
@@ -57,10 +64,176 @@
             color: #ffffff;
         }
 
+        /* Animación del carrito */
+        @keyframes vibrar {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .carrito-actualizado {
+            animation: vibrar 0.3s ease;
+        }
+
+        /* Barra de notificación */
+        .notificacion-agregado {
+            position: fixed;
+            top: 6rem;
+            right: 2rem;
+            background: rgba(0, 0, 0, 0.9);
+            color: #ffd700;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            border-left: 5px solid #ff0000;
+            z-index: 999;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .notificacion-agregado.mostrar {
+            transform: translateX(0);
+        }
+
+        .notificacion-contenido {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .notificacion-icono {
+            font-size: 2rem;
+        }
+
+        .notificacion-texto h4 {
+            color: #ff0000;
+            margin-bottom: 0.3rem;
+        }
+
+        .notificacion-texto p {
+            font-family: Arial, sans-serif;
+            font-size: 0.9rem;
+        }
+
+        /* Modal de datos del cliente */
+        .modal-cliente {
+            display: none;
+            position: fixed;
+            z-index: 3000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-cliente-contenido {
+            background: rgba(0, 0, 0, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid #ff0000;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+        }
+
+        .modal-cliente-titulo {
+            color: #ff0000;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .modal-cliente-subtitulo {
+            color: #ffd700;
+            font-family: Arial, sans-serif;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .campo-form {
+            margin-bottom: 1.5rem;
+        }
+
+        .campo-form label {
+            display: block;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            font-family: Arial, sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .campo-form input {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 10px;
+            border: 2px solid #ff0000;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+        }
+
+        .campo-form input:focus {
+            outline: none;
+            border-color: #ffd700;
+        }
+
+        .modal-cliente-botones {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-modal {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Arial Black', Gadget, sans-serif;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .btn-confirmar {
+            background: #ff0000;
+            color: #ffffff;
+        }
+
+        .btn-confirmar:hover {
+            background: #ffd700;
+            color: #000000;
+        }
+
+        .btn-cancelar {
+            background: #333333;
+            color: #ffffff;
+        }
+
+        .btn-cancelar:hover {
+            background: #666666;
+        }
+
+        .cerrar-modal-cliente {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            color: #ff0000;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .cerrar-modal-cliente:hover {
+            color: #ffd700;
+        }
+
         /* Encabezado del negocio */
         header {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
             padding: 0 5%;
         }
 
@@ -71,6 +244,17 @@
             background-clip: text;
             color: transparent;
             text-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .descripcion-masa {
+            font-size: 1.1rem;
+            color: #333333;
+            margin: 1rem 0;
+            font-family: Arial, sans-serif;
+            font-style: italic;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .info-negocio {
@@ -294,6 +478,7 @@
             transition: transform 0.2s ease;
             border: none;
             cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
         .whatsapp-btn:hover {
@@ -315,6 +500,11 @@
 
             .logo-titulo {
                 font-size: 2.5rem;
+            }
+
+            .descripcion-masa {
+                font-size: 0.9rem;
+                padding: 0 1rem;
             }
 
             .info-negocio {
@@ -339,16 +529,70 @@
                 right: 1.5rem;
                 font-size: 2rem;
             }
+
+            .notificacion-agregado {
+                top: 8rem;
+                right: 1rem;
+                left: 1rem;
+                transform: translateY(-400px);
+            }
+
+            .notificacion-agregado.mostrar {
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
 <body>
     <!-- Carrito superior fijo -->
     <div class="carrito-superior">
-        <h2 class="carrito-titulo">🛒 CARRITO</h2>
+        <h2 class="carrito-titulo">
+            <span class="carrito-icono">🥟</span>
+            NILAS EMPANADAS
+        </h2>
         <div class="carrito-contenido">
             <div class="carrito-items" id="carrito-items">No hay productos agregados</div>
             <div class="carrito-total" id="carrito-total">Total: $0.00</div>
+        </div>
+    </div>
+
+    <!-- Notificación de producto agregado -->
+    <div class="notificacion-agregado" id="notificacion-agregado">
+        <div class="notificacion-contenido">
+            <div class="notificacion-icono">🥟✨</div>
+            <div class="notificacion-texto">
+                <h4>¡AGREGADO!</h4>
+                <p id="notificacion-mensaje">Producto al carrito</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para datos del cliente -->
+    <div class="modal-cliente" id="modal-cliente">
+        <div class="modal-cliente-contenido">
+            <span class="cerrar-modal-cliente" id="cerrar-modal-cliente">&times;</span>
+            <h2 class="modal-cliente-titulo">🥟 NILAS EMPANADAS</h2>
+            <p class="modal-cliente-subtitulo">Completa tus datos para el envío</p>
+            
+            <div class="campo-form">
+                <label>👤 Nombre completo *</label>
+                <input type="text" id="cliente-nombre" placeholder="Ej: Juan Pérez">
+            </div>
+            
+            <div class="campo-form">
+                <label>📱 Teléfono *</label>
+                <input type="tel" id="cliente-telefono" placeholder="Ej: 0987654321">
+            </div>
+            
+            <div class="campo-form">
+                <label>📍 Dirección de entrega *</label>
+                <input type="text" id="cliente-direccion" placeholder="Ej: Domingo Comín y 8 de Diciembre">
+            </div>
+            
+            <div class="modal-cliente-botones">
+                <button class="btn-modal btn-cancelar" id="cancelar-pedido">Cancelar</button>
+                <button class="btn-modal btn-confirmar" id="confirmar-pedido">Enviar a WhatsApp</button>
+            </div>
         </div>
     </div>
 
@@ -361,10 +605,13 @@
     <!-- Encabezado -->
     <header>
         <h1 class="logo-titulo">NILAS EMPANADAS</h1>
+        <p class="descripcion-masa">
+            🥟 Empanadas elaboradas con masa artesanal de harina de trigo, sin levadura, crujientes y recién hechas.
+        </p>
         <div class="info-negocio">
             <p>📍 Domingo Comín y 8 de Diciembre, Sucúa</p>
             <p>🕒 8:00 am – 1:00 pm | 3:00 pm – 10:00 pm</p>
-            <p>📱 +593 95 959 5925</p>
+            <p>📱 +593 95 959 2511</p>
         </div>
     </header>
 
@@ -373,7 +620,7 @@
         <!-- Empanada Hawaiana -->
         <div class="empanada-card" data-nombre="Hawaiana" data-precio="1.50">
             <div class="empanada-img-container" onclick="ampliarImagen(this)">
-                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Empanada Hawaiana" class="empanada-img">
+                <img src="https://raw.githubusercontent.com/welding30001994/NILAEMPANADAS/refs/heads/main/EMPANADAS.jpg" alt="Empanada Hawaiana" class="empanada-img">
             </div>
             <div class="empanada-header">
                 <h3 class="empanada-nombre">Hawaiana</h3>
@@ -391,7 +638,7 @@
         <!-- Empanada Choris Queso -->
         <div class="empanada-card" data-nombre="Choris Queso" data-precio="1.75">
             <div class="empanada-img-container" onclick="ampliarImagen(this)">
-                <img src="https://images.unsplash.com/photo-1542281286-9e0a16bb7366?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Empanada Choris Queso" class="empanada-img">
+                <img src="https://raw.githubusercontent.com/welding30001994/NILAEMPANADAS/refs/heads/main/EMPANADAS.jpg" alt="Empanada Choris Queso" class="empanada-img">
             </div>
             <div class="empanada-header">
                 <h3 class="empanada-nombre">Choris Queso</h3>
@@ -409,7 +656,7 @@
         <!-- Empanada Napolitano -->
         <div class="empanada-card" data-nombre="Napolitano" data-precio="1.75">
             <div class="empanada-img-container" onclick="ampliarImagen(this)">
-                <img src="https://images.unsplash.com/photo-1596747513325-5924c45155af?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Empanada Napolitano" class="empanada-img">
+                <img src="https://raw.githubusercontent.com/welding30001994/NILAEMPANADAS/refs/heads/main/EMPANADAS.jpg" alt="Empanada Napolitano" class="empanada-img">
             </div>
             <div class="empanada-header">
                 <h3 class="empanada-nombre">Napolitano</h3>
@@ -427,7 +674,7 @@
         <!-- Empanada Pizza -->
         <div class="empanada-card" data-nombre="Pizza" data-precio="1.50">
             <div class="empanada-img-container" onclick="ampliarImagen(this)">
-                <img src="https://images.unsplash.com/photo-1585088762211-29ca8b728b5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Empanada Pizza" class="empanada-img">
+                <img src="https://raw.githubusercontent.com/welding30001994/NILAEMPANADAS/refs/heads/main/EMPANADAS.jpg" alt="Empanada Pizza" class="empanada-img">
             </div>
             <div class="empanada-header">
                 <h3 class="empanada-nombre">Pizza</h3>
@@ -445,7 +692,7 @@
         <!-- Empanada BBQ -->
         <div class="empanada-card" data-nombre="BBQ" data-precio="1.75">
             <div class="empanada-img-container" onclick="ampliarImagen(this)">
-                <img src="https://images.unsplash.com/photo-1576086135518-b50d3e7d3e7d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Empanada BBQ" class="empanada-img">
+                <img src="https://raw.githubusercontent.com/welding30001994/NILAEMPANADAS/refs/heads/main/EMPANADAS.jpg" alt="Empanada BBQ" class="empanada-img">
             </div>
             <div class="empanada-header">
                 <h3 class="empanada-nombre">BBQ</h3>
@@ -463,7 +710,7 @@
         <!-- Empanada Taquera -->
         <div class="empanada-card" data-nombre="Taquera" data-precio="1.75">
             <div class="empanada-img-container" onclick="ampliarImagen(this)">
-                <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Empanada Taquera" class="empanada-img">
+                <img src="https://raw.githubusercontent.com/welding30001994/NILAEMPANADAS/refs/heads/main/EMPANADAS.jpg" alt="Empanada Taquera" class="empanada-img">
             </div>
             <div class="empanada-header">
                 <h3 class="empanada-nombre">Taquera</h3>
@@ -481,7 +728,7 @@
         <!-- Empanada Pollo -->
         <div class="empanada-card" data-nombre="Pollo" data-precio="1.50">
             <div class="empanada-img-container" onclick="ampliarImagen(this)">
-                <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Empanada Pollo" class="empanada-img">
+                <img src="https://raw.githubusercontent.com/welding30001994/NILAEMPANADAS/refs/heads/main/EMPANADAS.jpg" alt="Empanada Pollo" class="empanada-img">
             </div>
             <div class="empanada-header">
                 <h3 class="empanada-nombre">Pollo</h3>
@@ -499,7 +746,7 @@
         <!-- Empanada Carne -->
         <div class="empanada-card" data-nombre="Carne" data-precio="1.50">
             <div class="empanada-img-container" onclick="ampliarImagen(this)">
-                <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Empanada Carne" class="empanada-img">
+                <img src="https://raw.githubusercontent.com/welding30001994/NILAEMPANADAS/refs/heads/main/EMPANADAS.jpg" alt="Empanada Carne" class="empanada-img">
             </div>
             <div class="empanada-header">
                 <h3 class="empanada-nombre">Carne</h3>
@@ -517,7 +764,7 @@
         <!-- Empanada Camaron -->
         <div class="empanada-card" data-nombre="Camaron" data-precio="2.00">
             <div class="empanada-img-container" onclick="ampliarImagen(this)">
-                <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Empanada Camaron" class="empanada-img">
+                <img src="https://raw.githubusercontent.com/welding30001994/NILAEMPANADAS/refs/heads/main/EMPANADAS.jpg" alt="Empanada Camaron" class="empanada-img">
             </div>
             <div class="empanada-header">
                 <h3 class="empanada-nombre">Camaron</h3>
@@ -535,7 +782,7 @@
         <!-- Empanada Queso Mozzarella -->
         <div class="empanada-card" data-nombre="Queso Mozzarella" data-precio="2.00">
             <div class="empanada-img-container" onclick="ampliarImagen(this)">
-                <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Empanada Queso Mozzarella" class="empanada-img">
+                <img src="https://raw.githubusercontent.com/welding30001994/NILAEMPANADAS/refs/heads/main/EMPANADAS.jpg" alt="Empanada Queso Mozzarella" class="empanada-img">
             </div>
             <div class="empanada-header">
                 <h3 class="empanada-nombre">Queso Mozzarella</h3>
@@ -567,7 +814,7 @@
     <script>
         // Variables globales
         let carrito = [];
-        let numeroWhatsApp = '593959595925'; // Número sin el + ni espacios
+        const numeroWhatsApp = '593959592511';
 
         // Función para ampliar imagen
         function ampliarImagen(elemento) {
@@ -581,17 +828,36 @@
             }
         }
 
-        // Cerrar modal
+        // Cerrar modal de imagen
         document.getElementById('cerrar-modal').addEventListener('click', function() {
             document.getElementById('modal-imagen').style.display = 'none';
         });
 
-        // Cerrar modal al hacer clic fuera de la imagen
         document.getElementById('modal-imagen').addEventListener('click', function(e) {
             if (e.target === this) {
                 this.style.display = 'none';
             }
         });
+
+        // Función para mostrar notificación
+        function mostrarNotificacion(nombreProducto, cantidad) {
+            const notificacion = document.getElementById('notificacion-agregado');
+            const mensaje = document.getElementById('notificacion-mensaje');
+            
+            mensaje.textContent = `${cantidad}x ${nombreProducto} al carrito`;
+            notificacion.classList.add('mostrar');
+            
+            // Animar carrito
+            const carritoSuperior = document.querySelector('.carrito-superior');
+            carritoSuperior.classList.add('carrito-actualizado');
+            setTimeout(() => {
+                carritoSuperior.classList.remove('carrito-actualizado');
+            }, 300);
+            
+            setTimeout(() => {
+                notificacion.classList.remove('mostrar');
+            }, 2000);
+        }
 
         // Función para actualizar el carrito en el HTML
         function actualizarCarrito() {
@@ -634,6 +900,7 @@
             }
             
             actualizarCarrito();
+            mostrarNotificacion(nombre, cantidad);
         }
 
         // Configurar todas las tarjetas de empanadas
@@ -659,7 +926,7 @@
             
             agregarBtn.addEventListener('click', () => {
                 agregarAlCarrito(card, cantidad);
-                // Mostrar mensaje visual
+                // Feedback visual en el botón
                 agregarBtn.textContent = '✓ AGREGADO';
                 setTimeout(() => {
                     agregarBtn.textContent = 'AGREGAR';
@@ -667,29 +934,75 @@
             });
         });
 
-        // Función para pedir por WhatsApp
+        // Mostrar modal de datos del cliente
         document.getElementById('whatsapp-btn').addEventListener('click', function() {
             if (carrito.length === 0) {
-                alert('Agrega productos al carrito primero');
+                alert('🥟 Agrega productos al carrito primero');
                 return;
             }
             
-            // Solicitar número de teléfono
-            const telefonoCliente = prompt('📱 Por favor ingresa tu número de teléfono (para confirmar el pedido):');
+            // Mostrar modal
+            document.getElementById('modal-cliente').style.display = 'flex';
+        });
+
+        // Cerrar modal
+        function cerrarModalCliente() {
+            document.getElementById('modal-cliente').style.display = 'none';
+        }
+
+        document.getElementById('cerrar-modal-cliente').addEventListener('click', cerrarModalCliente);
+        document.getElementById('cancelar-pedido').addEventListener('click', cerrarModalCliente);
+        
+        // Cerrar al hacer clic fuera del modal
+        document.getElementById('modal-cliente').addEventListener('click', function(e) {
+            if (e.target === this) {
+                cerrarModalCliente();
+            }
+        });
+
+        // Confirmar pedido y enviar a WhatsApp
+        document.getElementById('confirmar-pedido').addEventListener('click', function() {
+            const nombre = document.getElementById('cliente-nombre').value.trim();
+            const telefono = document.getElementById('cliente-telefono').value.trim();
+            const direccion = document.getElementById('cliente-direccion').value.trim();
             
-            if (!telefonoCliente) return; // Si cancela, no hacer nada
+            // Validar campos
+            if (!nombre || !telefono || !direccion) {
+                alert('⚠️ Por favor completa todos los campos');
+                return;
+            }
+            
+            // Validar teléfono básico
+            if (telefono.length < 7) {
+                alert('⚠️ Ingresa un número de teléfono válido');
+                return;
+            }
             
             // Crear mensaje del pedido
-            let mensaje = '🍽️ *NUEVO PEDIDO - NILAS EMPANADAS* 🍽️\n\n';
-            mensaje += '*CLIENTE:* ' + telefonoCliente + '\n';
-            mensaje += '*PEDIDO:*\n';
+            let mensaje = '🥟 *¡GRACIAS POR PEDIR EN NILAS EMPANADAS!* 🥟\n\n';
+            mensaje += '━━━━━━━━━━━━━━━━━━━\n';
+            mensaje += '*📍 DATOS DE ENTREGA*\n';
+            mensaje += '━━━━━━━━━━━━━━━━━━━\n';
+            mensaje += `👤 *Cliente:* ${nombre}\n`;
+            mensaje += `📱 *Teléfono:* ${telefono}\n`;
+            mensaje += `📍 *Dirección:* ${direccion}\n`;
+            mensaje += '━━━━━━━━━━━━━━━━━━━\n\n';
+            
+            mensaje += '*🍽️ DETALLE DEL PEDIDO*\n';
+            mensaje += '━━━━━━━━━━━━━━━━━━━\n';
             
             carrito.forEach(item => {
                 mensaje += `• ${item.cantidad}x ${item.nombre} - $${(item.precio * item.cantidad).toFixed(2)}\n`;
             });
             
+            mensaje += '━━━━━━━━━━━━━━━━━━━\n';
             const total = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
-            mensaje += `\n💰 *TOTAL: $${total.toFixed(2)}*`;
+            mensaje += `💰 *TOTAL: $${total.toFixed(2)}*\n`;
+            mensaje += '━━━━━━━━━━━━━━━━━━━\n\n';
+            
+            mensaje += '🕒 *Tiempo de entrega aproximado:* 20-30 minutos\n';
+            mensaje += '💳 *Formas de pago:* Efectivo o transferencia\n\n';
+            mensaje += '✨ *¡Gracias por preferirnos!* ✨';
             
             // Codificar mensaje para URL
             const mensajeCodificado = encodeURIComponent(mensaje);
@@ -697,14 +1010,24 @@
             // Crear URL de WhatsApp
             const url = `https://wa.me/${numeroWhatsApp}?text=${mensajeCodificado}`;
             
+            // Cerrar modal
+            cerrarModalCliente();
+            
             // Abrir WhatsApp
             window.open(url, '_blank');
             
-            // Opcional: limpiar carrito después de pedir
-            if (confirm('¿Deseas vaciar el carrito después de este pedido?')) {
-                carrito = [];
-                actualizarCarrito();
-            }
+            // Opción para vaciar carrito
+            setTimeout(() => {
+                if (confirm('¿Deseas vaciar el carrito para un nuevo pedido?')) {
+                    carrito = [];
+                    actualizarCarrito();
+                    
+                    // Limpiar campos del modal
+                    document.getElementById('cliente-nombre').value = '';
+                    document.getElementById('cliente-telefono').value = '';
+                    document.getElementById('cliente-direccion').value = '';
+                }
+            }, 500);
         });
 
         // Inicializar carrito
