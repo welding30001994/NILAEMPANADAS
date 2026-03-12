@@ -2,782 +2,713 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Admin Nila Empanadas</title>
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NILAS EMPANADAS | Menú Futurista</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Arial Black', Gadget, sans-serif;
         }
 
+        /* Fondo general */
         body {
-            background: linear-gradient(135deg, #ff0000 0%, #ffffff 50%, #ff0000 100%);
+            background: linear-gradient(rgba(255, 0, 0, 0.15), rgba(255, 255, 255, 0.95));
             min-height: 100vh;
-            padding: 10px;
-            position: relative;
-            overflow-x: hidden;
+            padding-top: 8rem;
         }
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.3) 1px, transparent 1px);
-            background-size: 30px 30px;
-            animation: glitter 15s linear infinite;
-            pointer-events: none;
-        }
-
-        @keyframes glitter {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            100% { transform: translate(30px, 30px) rotate(5deg); }
-        }
-
-        .container {
-            max-width: 100%;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-            padding: 0 5px;
-        }
-
-        .header-admin {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            padding: 15px;
-            border-radius: 50px;
-            border: 2px solid white;
-        }
-
-        h1 {
-            color: white;
-            font-size: clamp(1.5em, 5vw, 2.5em);
-            text-shadow: 0 0 20px rgba(255,0,0,0.8), 0 0 40px rgba(255,255,255,0.5);
-            letter-spacing: 2px;
-            animation: neon 1.5s ease-in-out infinite alternate;
-            line-height: 1.2;
-        }
-
-        @keyframes neon {
-            from { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff0000; }
-            to { text-shadow: 0 0 15px #fff, 0 0 25px #ff4d4d, 0 0 35px #ff0000; }
-        }
-
-        .btn-shop {
-            background: linear-gradient(45deg, #ff0000, #ffffff);
-            color: #ff0000;
-            border: 3px solid white;
-            padding: 12px 25px;
-            border-radius: 50px;
-            font-size: clamp(1em, 4vw, 1.3em);
-            font-weight: bold;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.3s;
-            box-shadow: 0 0 30px rgba(255,0,0,0.5);
-            animation: pulse 2s infinite;
-        }
-
-        .btn-shop:hover {
-            transform: scale(1.1);
-            background: linear-gradient(45deg, #ffffff, #ff0000);
-            color: white;
-            box-shadow: 0 0 50px rgba(255,255,255,0.8);
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .form-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 3px solid rgba(255, 0, 0, 0.5);
-            border-radius: 30px;
-            padding: 20px;
-            box-shadow: 0 20px 50px rgba(255,0,0,0.3), 0 0 0 2px rgba(255,255,255,0.5) inset;
-            margin-bottom: 30px;
-        }
-
-        .form-title {
-            color: #ff0000;
-            font-size: clamp(1.5em, 5vw, 2em);
-            margin-bottom: 15px;
-            border-bottom: 3px solid #ff0000;
-            padding-bottom: 10px;
-            display: inline-block;
-        }
-
-        .camera-selector {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-
-        .camera-btn {
-            flex: 1;
-            min-width: 120px;
-            padding: 12px;
-            border: 2px solid #ff0000;
-            background: white;
-            color: #ff0000;
-            border-radius: 50px;
-            font-size: 1em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .camera-btn.active {
-            background: #ff0000;
-            color: white;
-            box-shadow: 0 0 20px #ff0000;
-        }
-
-        .camera-section {
-            background: linear-gradient(45deg, #ff0000, #ffffff);
-            padding: 15px;
-            border-radius: 25px;
-            margin-bottom: 20px;
-        }
-
-        .camera-container {
-            position: relative;
-            width: 100%;
-            border-radius: 20px;
-            overflow: hidden;
-            border: 4px solid white;
-            box-shadow: 0 0 30px rgba(255,0,0,0.5);
-            background: #000;
-            aspect-ratio: 4/3;
-        }
-
-        #video, #canvas {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .camera-controls {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .btn {
-            padding: 15px 20px;
-            border: none;
-            border-radius: 50px;
-            font-size: clamp(1em, 4vw, 1.2em);
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
-            overflow: hidden;
-            flex: 1;
-            min-width: 140px;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transition: left 0.5s;
-        }
-
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        .btn-red {
-            background: #ff0000;
-            color: white;
-            box-shadow: 0 5px 0 #990000;
-        }
-
-        .btn-red:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 0 #990000;
-        }
-
-        .btn-white {
-            background: white;
-            color: #ff0000;
-            border: 2px solid #ff0000;
-        }
-
-        .btn-white:hover {
-            background: #ff0000;
-            color: white;
-        }
-
-        .input-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            color: #ff0000;
-            font-weight: bold;
-            margin-bottom: 5px;
-            font-size: clamp(1em, 4vw, 1.2em);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #ff0000;
-            border-radius: 15px;
-            font-size: 1em;
-            background: rgba(255,255,255,0.9);
-            transition: all 0.3s;
-        }
-
-        input:focus, textarea:focus {
-            outline: none;
-            box-shadow: 0 0 20px rgba(255,0,0,0.5);
-            transform: scale(1.02);
-        }
-
-        .loading {
-            display: none;
+        /* Carrito superior fijo */
+        .carrito-superior {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            color: white;
-        }
-
-        .loading.active {
+            background: rgba(0, 0, 0, 0.9);
+            color: #ffffff;
+            padding: 1rem 5%;
             display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(255, 0, 0, 0.5);
         }
 
-        .spinner {
-            border: 5px solid white;
-            border-top: 5px solid #ff0000;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .products-section {
-            margin-top: 30px;
-        }
-
-        .products-section h2 {
-            color: white;
-            font-size: clamp(1.5em, 5vw, 2em);
-            margin-bottom: 20px;
-            text-shadow: 0 0 10px red;
-            background: rgba(255,0,0,0.3);
-            padding: 15px;
-            border-radius: 50px;
-            text-align: center;
-            backdrop-filter: blur(5px);
-        }
-
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 15px;
-        }
-
-        .product-card {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(5px);
-            border: 3px solid #ff0000;
-            border-radius: 25px;
-            padding: 15px;
-            text-align: center;
-            transition: all 0.3s;
-            animation: fadeIn 0.5s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .product-card:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 15px 30px rgba(255,0,0,0.4);
-        }
-
-        .product-image {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            border-radius: 15px;
-            border: 3px solid #ff0000;
-        }
-
-        .product-name {
+        .carrito-titulo {
             color: #ff0000;
-            font-size: 1.5em;
-            margin: 10px 0;
+            font-size: 1.5rem;
+        }
+
+        .carrito-contenido {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            max-width: 70%;
+        }
+
+        .carrito-items {
+            font-size: 0.9rem;
+            color: #ffd700;
+        }
+
+        .carrito-total {
+            font-size: 1.1rem;
+            color: #ffffff;
+        }
+
+        /* Encabezado del negocio */
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 0 5%;
+        }
+
+        .logo-titulo {
+            font-size: 3.5rem;
+            background: linear-gradient(90deg, #ff0000, #ffd700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-negocio {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+            color: #000000;
+            font-size: 1rem;
+        }
+
+        /* Modal de imagen ampliada */
+        .modal-imagen {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-contenido {
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .cerrar-modal {
+            position: absolute;
+            top: 2rem;
+            right: 3rem;
+            color: #ff0000;
+            font-size: 3rem;
             font-weight: bold;
-        }
-
-        .product-price {
-            color: white;
-            background: #ff0000;
-            display: inline-block;
-            padding: 8px 25px;
-            border-radius: 50px;
-            font-size: 1.3em;
-            margin: 10px 0;
-            border: 2px solid white;
-        }
-
-        .product-concept {
-            color: #333;
-            font-style: italic;
-            margin: 10px 0;
-            font-size: 0.95em;
-        }
-
-        .delete-btn {
-            background: #ff0000;
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 50px;
             cursor: pointer;
-            margin-top: 10px;
-            font-weight: bold;
-            border: 2px solid white;
-            width: 100%;
-            font-size: 1.1em;
+            transition: color 0.2s ease;
         }
 
-        .delete-btn:hover {
-            background: #990000;
+        .cerrar-modal:hover {
+            color: #ffd700;
         }
 
-        .photo-preview {
-            position: relative;
-            margin-top: 10px;
+        /* Contenedor del menú */
+        .menu-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            padding: 0 5% 4rem;
         }
 
-        .photo-preview img {
-            width: 100%;
+        /* Tarjetas de empanadas */
+        .empanada-card {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid rgba(255, 0, 0, 0.6);
             border-radius: 15px;
-            border: 3px solid #ff0000;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        @media (max-width: 480px) {
-            .header-admin {
+        .empanada-card::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 40%;
+            height: 15%;
+            background: linear-gradient(45deg, rgba(255, 215, 0, 0.3), transparent);
+            border-top-left-radius: 50%;
+        }
+
+        .empanada-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        /* Contenedor de imagen de empanada */
+        .empanada-img-container {
+            width: 100%;
+            height: 220px;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            overflow: hidden;
+            border: 1px solid #ffd700;
+        }
+
+        .empanada-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .empanada-img-container:hover .empanada-img {
+            transform: scale(1.05);
+        }
+
+        /* Detalles de la empanada */
+        .empanada-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .empanada-nombre {
+            font-size: 1.6rem;
+            color: #ff0000;
+            text-transform: uppercase;
+        }
+
+        .empanada-precio {
+            font-size: 1.5rem;
+            color: #000000;
+            background: rgba(255, 215, 0, 0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+        }
+
+        .empanada-descripcion {
+            font-size: 0.95rem;
+            color: #333333;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Controles de cantidad y botón */
+        .control-container {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .cantidad-btn {
+            background: #ff0000;
+            color: #ffffff;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .cantidad-btn:hover {
+            background: #ffd700;
+            color: #000000;
+        }
+
+        .cantidad-numero {
+            font-size: 1.1rem;
+            min-width: 30px;
+            text-align: center;
+            color: #000000;
+        }
+
+        .agregar-btn {
+            background: #000000;
+            color: #ffffff;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            margin-left: auto;
+        }
+
+        .agregar-btn:hover {
+            background: #ffd700;
+            color: #000000;
+        }
+
+        /* Sección de salsas */
+        .salsas-section {
+            padding: 2rem 5%;
+            background: rgba(255, 0, 0, 0.1);
+            margin: 0 5% 3rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .salsas-titulo {
+            font-size: 1.8rem;
+            color: #ff0000;
+            margin-bottom: 1rem;
+        }
+
+        .salsas-lista {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            font-size: 1.1rem;
+            color: #000000;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Botón de WhatsApp */
+        .whatsapp-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(37, 211, 102, 0.9);
+            color: #ffffff;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1rem;
+            z-index: 900;
+            transition: transform 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .whatsapp-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .carrito-superior {
                 flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .carrito-contenido {
+                max-width: 100%;
                 text-align: center;
             }
-            
-            .btn-shop {
-                width: 100%;
+
+            .logo-titulo {
+                font-size: 2.5rem;
+            }
+
+            .info-negocio {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
+
+            .control-container {
+                flex-wrap: wrap;
                 justify-content: center;
             }
-            
-            .camera-controls {
-                flex-direction: column;
-            }
-            
-            .btn {
+
+            .agregar-btn {
+                margin-left: 0;
                 width: 100%;
+                margin-top: 1rem;
             }
-            
-            .products-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .form-card {
-                padding: 15px;
+
+            .cerrar-modal {
+                top: 1rem;
+                right: 1.5rem;
+                font-size: 2rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Loading spinner -->
-    <div class="loading" id="loading">
-        <div class="spinner"></div>
-        <div id="loadingMessage">Subiendo producto...</div>
-    </div>
-
-    <div class="container">
-        <div class="header-admin">
-            <h1>⚡ NILA ADMIN ⚡</h1>
-            <a href="tienda.html" class="btn-shop" target="_blank">
-                <span>🛒</span> VER TIENDA <span>➡️</span>
-            </a>
-        </div>
-
-        <div class="form-card">
-            <h2 class="form-title">📸 SUBIR NUEVA EMPANADA</h2>
-            
-            <div class="camera-selector">
-                <button class="camera-btn active" onclick="switchCamera('environment')" id="btnBack">📷 TRASERA</button>
-                <button class="camera-btn" onclick="switchCamera('user')" id="btnFront">🤳 FRONTAL</button>
-            </div>
-            
-            <div class="camera-section">
-                <div class="camera-container" id="cameraContainer">
-                    <video id="video" autoplay playsinline></video>
-                    <canvas id="canvas" style="display: none;"></canvas>
-                </div>
-                
-                <div class="camera-controls">
-                    <button class="btn btn-red" onclick="startCamera()">📷 ACTIVAR</button>
-                    <button class="btn btn-white" onclick="takePhoto()">📸 TOMAR FOTO</button>
-                </div>
-
-                <div id="photoPreview" class="photo-preview" style="display: none;"></div>
-            </div>
-
-            <div class="input-group">
-                <label>📛 NOMBRE DE LA EMPANADA</label>
-                <input type="text" id="name" placeholder="Ej: Empanada de Carne">
-            </div>
-
-            <div class="input-group">
-                <label>💰 PRECIO</label>
-                <input type="number" id="price" placeholder="Ej: 2.50" step="0.01" min="0">
-            </div>
-
-            <div class="input-group">
-                <label>📝 CONCEPTO (Ingredientes)</label>
-                <textarea id="concept" rows="3" placeholder="Ej: Carne, cebolla, huevo, aceitunas..."></textarea>
-            </div>
-
-            <button class="btn btn-red" onclick="saveProduct()" style="width: 100%;">💾 GUARDAR PRODUCTO</button>
-        </div>
-
-        <div class="products-section">
-            <h2>📦 PRODUCTOS DISPONIBLES</h2>
-            <div id="productsList" class="products-grid"></div>
+    <!-- Carrito superior fijo -->
+    <div class="carrito-superior">
+        <h2 class="carrito-titulo">🛒 CARRITO</h2>
+        <div class="carrito-contenido">
+            <div class="carrito-items" id="carrito-items">No hay productos agregados</div>
+            <div class="carrito-total" id="carrito-total">Total: $0.00</div>
         </div>
     </div>
+
+    <!-- Modal para imagen ampliada -->
+    <div class="modal-imagen" id="modal-imagen">
+        <span class="cerrar-modal" id="cerrar-modal">&times;</span>
+        <img class="modal-contenido" id="imagen-ampliada">
+    </div>
+
+    <!-- Encabezado -->
+    <header>
+        <h1 class="logo-titulo">NILAS EMPANADAS</h1>
+        <div class="info-negocio">
+            <p>📍 Domingo Comín y 8 de Diciembre, Sucúa</p>
+            <p>🕒 8:00 am – 1:00 pm | 3:00 pm – 10:00 pm</p>
+            <p>📱 +593 95 959 5925</p>
+        </div>
+    </header>
+
+    <!-- Contenedor del menú -->
+    <main class="menu-container">
+        <!-- Empanada Hawaiana -->
+        <div class="empanada-card" data-nombre="Hawaiana" data-precio="1.50">
+            <div class="empanada-img-container" onclick="ampliarImagen(this)">
+                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Empanada Hawaiana" class="empanada-img">
+            </div>
+            <div class="empanada-header">
+                <h3 class="empanada-nombre">Hawaiana</h3>
+                <span class="empanada-precio">$1.50</span>
+            </div>
+            <p class="empanada-descripcion">Mezcla tropical de piña, queso mozzarella y salchichas.</p>
+            <div class="control-container">
+                <button class="cantidad-btn menos">-</button>
+                <span class="cantidad-numero">1</span>
+                <button class="cantidad-btn mas">+</button>
+                <button class="agregar-btn">Agregar</button>
+            </div>
+        </div>
+
+        <!-- Empanada Choris Queso -->
+        <div class="empanada-card" data-nombre="Choris Queso" data-precio="1.75">
+            <div class="empanada-img-container" onclick="ampliarImagen(this)">
+                <img src="https://images.unsplash.com/photo-1542281286-9e0a16bb7366?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Empanada Choris Queso" class="empanada-img">
+            </div>
+            <div class="empanada-header">
+                <h3 class="empanada-nombre">Choris Queso</h3>
+                <span class="empanada-precio">$1.75</span>
+            </div>
+            <p class="empanada-descripcion">Delicioso chorizo ahumado con queso mozzarella derretido.</p>
+            <div class="control-container">
+                <button class="cantidad-btn menos">-</button>
+                <span class="cantidad-numero">1</span>
+                <button class="cantidad-btn mas">+</button>
+                <button class="agregar-btn">Agregar</button>
+            </div>
+        </div>
+
+        <!-- Empanada Napolitano -->
+        <div class="empanada-card" data-nombre="Napolitano" data-precio="1.75">
+            <div class="empanada-img-container" onclick="ampliarImagen(this)">
+                <img src="https://images.unsplash.com/photo-1596747513325-5924c45155af?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Empanada Napolitano" class="empanada-img">
+            </div>
+            <div class="empanada-header">
+                <h3 class="empanada-nombre">Napolitano</h3>
+                <span class="empanada-precio">$1.75</span>
+            </div>
+            <p class="empanada-descripcion">Carne molida con queso y un toque especial estilo lasaña.</p>
+            <div class="control-container">
+                <button class="cantidad-btn menos">-</button>
+                <span class="cantidad-numero">1</span>
+                <button class="cantidad-btn mas">+</button>
+                <button class="agregar-btn">Agregar</button>
+            </div>
+        </div>
+
+        <!-- Empanada Pizza -->
+        <div class="empanada-card" data-nombre="Pizza" data-precio="1.50">
+            <div class="empanada-img-container" onclick="ampliarImagen(this)">
+                <img src="https://images.unsplash.com/photo-1585088762211-29ca8b728b5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Empanada Pizza" class="empanada-img">
+            </div>
+            <div class="empanada-header">
+                <h3 class="empanada-nombre">Pizza</h3>
+                <span class="empanada-precio">$1.50</span>
+            </div>
+            <p class="empanada-descripcion">Salsa de pizza, peperones y jamón al estilo clásico.</p>
+            <div class="control-container">
+                <button class="cantidad-btn menos">-</button>
+                <span class="cantidad-numero">1</span>
+                <button class="cantidad-btn mas">+</button>
+                <button class="agregar-btn">Agregar</button>
+            </div>
+        </div>
+
+        <!-- Empanada BBQ -->
+        <div class="empanada-card" data-nombre="BBQ" data-precio="1.75">
+            <div class="empanada-img-container" onclick="ampliarImagen(this)">
+                <img src="https://images.unsplash.com/photo-1576086135518-b50d3e7d3e7d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Empanada BBQ" class="empanada-img">
+            </div>
+            <div class="empanada-header">
+                <h3 class="empanada-nombre">BBQ</h3>
+                <span class="empanada-precio">$1.75</span>
+            </div>
+            <p class="empanada-descripcion">Carne molida con deliciosa salsa bbq.</p>
+            <div class="control-container">
+                <button class="cantidad-btn menos">-</button>
+                <span class="cantidad-numero">1</span>
+                <button class="cantidad-btn mas">+</button>
+                <button class="agregar-btn">Agregar</button>
+            </div>
+        </div>
+
+        <!-- Empanada Taquera -->
+        <div class="empanada-card" data-nombre="Taquera" data-precio="1.75">
+            <div class="empanada-img-container" onclick="ampliarImagen(this)">
+                <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Empanada Taquera" class="empanada-img">
+            </div>
+            <div class="empanada-header">
+                <h3 class="empanada-nombre">Taquera</h3>
+                <span class="empanada-precio">$1.75</span>
+            </div>
+            <p class="empanada-descripcion">Carne molida con frijoles al estilo taquero.</p>
+            <div class="control-container">
+                <button class="cantidad-btn menos">-</button>
+                <span class="cantidad-numero">1</span>
+                <button class="cantidad-btn mas">+</button>
+                <button class="agregar-btn">Agregar</button>
+            </div>
+        </div>
+
+        <!-- Empanada Pollo -->
+        <div class="empanada-card" data-nombre="Pollo" data-precio="1.50">
+            <div class="empanada-img-container" onclick="ampliarImagen(this)">
+                <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Empanada Pollo" class="empanada-img">
+            </div>
+            <div class="empanada-header">
+                <h3 class="empanada-nombre">Pollo</h3>
+                <span class="empanada-precio">$1.50</span>
+            </div>
+            <p class="empanada-descripcion">Pollo sazonado con zanahoria y alverja.</p>
+            <div class="control-container">
+                <button class="cantidad-btn menos">-</button>
+                <span class="cantidad-numero">1</span>
+                <button class="cantidad-btn mas">+</button>
+                <button class="agregar-btn">Agregar</button>
+            </div>
+        </div>
+
+        <!-- Empanada Carne -->
+        <div class="empanada-card" data-nombre="Carne" data-precio="1.50">
+            <div class="empanada-img-container" onclick="ampliarImagen(this)">
+                <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Empanada Carne" class="empanada-img">
+            </div>
+            <div class="empanada-header">
+                <h3 class="empanada-nombre">Carne</h3>
+                <span class="empanada-precio">$1.50</span>
+            </div>
+            <p class="empanada-descripcion">Carne molida con zanahoria y alverjas.</p>
+            <div class="control-container">
+                <button class="cantidad-btn menos">-</button>
+                <span class="cantidad-numero">1</span>
+                <button class="cantidad-btn mas">+</button>
+                <button class="agregar-btn">Agregar</button>
+            </div>
+        </div>
+
+        <!-- Empanada Camaron -->
+        <div class="empanada-card" data-nombre="Camaron" data-precio="2.00">
+            <div class="empanada-img-container" onclick="ampliarImagen(this)">
+                <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Empanada Camaron" class="empanada-img">
+            </div>
+            <div class="empanada-header">
+                <h3 class="empanada-nombre">Camaron</h3>
+                <span class="empanada-precio">$2.00</span>
+            </div>
+            <p class="empanada-descripcion">Camarón en salsa con zanahoria y alverjas.</p>
+            <div class="control-container">
+                <button class="cantidad-btn menos">-</button>
+                <span class="cantidad-numero">1</span>
+                <button class="cantidad-btn mas">+</button>
+                <button class="agregar-btn">Agregar</button>
+            </div>
+        </div>
+
+        <!-- Empanada Queso Mozzarella -->
+        <div class="empanada-card" data-nombre="Queso Mozzarella" data-precio="2.00">
+            <div class="empanada-img-container" onclick="ampliarImagen(this)">
+                <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Empanada Queso Mozzarella" class="empanada-img">
+            </div>
+            <div class="empanada-header">
+                <h3 class="empanada-nombre">Queso Mozzarella</h3>
+                <span class="empanada-precio">$2.00</span>
+            </div>
+            <p class="empanada-descripcion">Empanada rellena de queso mozzarella derretido.</p>
+            <div class="control-container">
+                <button class="cantidad-btn menos">-</button>
+                <span class="cantidad-numero">1</span>
+                <button class="cantidad-btn mas">+</button>
+                <button class="agregar-btn">Agregar</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Sección de salsas -->
+    <section class="salsas-section">
+        <h2 class="salsas-titulo">🥫 SALSAS</h2>
+        <div class="salsas-lista">
+            <span>🔥 Salsa Ahumada</span>
+            <span>🥚 Mayonesa</span>
+            <span>🌶️ Salsa de ají</span>
+        </div>
+    </section>
+
+    <!-- Botón de WhatsApp -->
+    <button class="whatsapp-btn" id="whatsapp-btn">📱 PEDIR POR WHATSAPP</button>
 
     <script>
-        // 🔥 TU CONFIGURACIÓN DE FIREBASE 🔥
-        const firebaseConfig = {
-            apiKey: "AIzaSyB1Cs2os3tTfrMbYSAmDeJAGnP4tTtsFdw",
-            authDomain: "beaver-trading.firebaseapp.com",
-            databaseURL: "https://beaver-trading-default-rtdb.firebaseio.com",
-            projectId: "beaver-trading",
-            storageBucket: "beaver-trading.firebasestorage.app",
-            messagingSenderId: "926610131904",
-            appId: "1:926610131904:web:c147bd337bd12b4d085625",
-            measurementId: "G-1K51WWF2ZJ"
-        };
+        // Variables globales
+        let carrito = [];
+        let numeroWhatsApp = '593959595925'; // Número sin el + ni espacios
 
-        // Inicializar Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const storage = firebase.storage();
-
-        let video = document.getElementById('video');
-        let canvas = document.getElementById('canvas');
-        let currentPhoto = null;
-        let currentFacingMode = 'environment';
-
-        // Mostrar/ocultar loading
-        function showLoading(message) {
-            document.getElementById('loadingMessage').textContent = message || 'Procesando...';
-            document.getElementById('loading').classList.add('active');
+        // Función para ampliar imagen
+        function ampliarImagen(elemento) {
+            const img = elemento.querySelector('.empanada-img');
+            const modal = document.getElementById('modal-imagen');
+            const imgAmpliada = document.getElementById('imagen-ampliada');
+            
+            if (img && img.src) {
+                imgAmpliada.src = img.src;
+                modal.style.display = 'flex';
+            }
         }
 
-        function hideLoading() {
-            document.getElementById('loading').classList.remove('active');
+        // Cerrar modal
+        document.getElementById('cerrar-modal').addEventListener('click', function() {
+            document.getElementById('modal-imagen').style.display = 'none';
+        });
+
+        // Cerrar modal al hacer clic fuera de la imagen
+        document.getElementById('modal-imagen').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+            }
+        });
+
+        // Función para actualizar el carrito en el HTML
+        function actualizarCarrito() {
+            const carritoItems = document.getElementById('carrito-items');
+            const carritoTotal = document.getElementById('carrito-total');
+            
+            if (carrito.length === 0) {
+                carritoItems.textContent = 'No hay productos agregados';
+                carritoTotal.textContent = 'Total: $0.00';
+                return;
+            }
+            
+            // Crear resumen de items
+            const itemsResumen = carrito.map(item => `${item.cantidad}x ${item.nombre}`).join(' • ');
+            carritoItems.textContent = itemsResumen;
+            
+            // Calcular total
+            const total = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+            carritoTotal.textContent = `Total: $${total.toFixed(2)}`;
         }
 
-        // Iniciar cámara
-        async function startCamera() {
-            try {
-                if (video.srcObject) {
-                    video.srcObject.getTracks().forEach(track => track.stop());
-                }
-                
-                const constraints = {
-                    video: {
-                        facingMode: currentFacingMode,
-                        width: { ideal: 1280 },
-                        height: { ideal: 720 }
-                    }
-                };
-                
-                const stream = await navigator.mediaDevices.getUserMedia(constraints);
-                video.srcObject = stream;
-                
-                document.querySelectorAll('.camera-btn').forEach(btn => {
-                    btn.classList.remove('active');
+        // Función para agregar al carrito
+        function agregarAlCarrito(card, cantidad) {
+            const nombre = card.dataset.nombre;
+            const precio = parseFloat(card.dataset.precio);
+            
+            // Verificar si ya existe en el carrito
+            const existeIndex = carrito.findIndex(item => item.nombre === nombre);
+            
+            if (existeIndex >= 0) {
+                // Actualizar cantidad
+                carrito[existeIndex].cantidad += cantidad;
+            } else {
+                // Agregar nuevo item
+                carrito.push({
+                    nombre: nombre,
+                    precio: precio,
+                    cantidad: cantidad
                 });
-                if (currentFacingMode === 'environment') {
-                    document.getElementById('btnBack').classList.add('active');
-                } else {
-                    document.getElementById('btnFront').classList.add('active');
+            }
+            
+            actualizarCarrito();
+        }
+
+        // Configurar todas las tarjetas de empanadas
+        document.querySelectorAll('.empanada-card').forEach(card => {
+            const menosBtn = card.querySelector('.menos');
+            const masBtn = card.querySelector('.mas');
+            const cantidadSpan = card.querySelector('.cantidad-numero');
+            const agregarBtn = card.querySelector('.agregar-btn');
+            
+            let cantidad = 1;
+            
+            menosBtn.addEventListener('click', () => {
+                if (cantidad > 1) {
+                    cantidad--;
+                    cantidadSpan.textContent = cantidad;
                 }
-                
-                document.getElementById('photoPreview').style.display = 'none';
-                video.style.display = 'block';
-                
-            } catch (err) {
-                alert('Error al acceder a la cámara: ' + err);
-            }
-        }
-
-        // Cambiar cámara
-        function switchCamera(mode) {
-            currentFacingMode = mode;
-            startCamera();
-        }
-
-        // Tomar foto
-        function takePhoto() {
-            if (!video.srcObject) {
-                alert('⚠️ Primero activa la cámara');
-                return;
-            }
-            
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-            
-            currentPhoto = canvas.toDataURL('image/jpeg', 0.9);
-            
-            const preview = document.getElementById('photoPreview');
-            preview.innerHTML = `<img src="${currentPhoto}" style="width: 100%; border-radius: 15px;">`;
-            preview.style.display = 'block';
-            video.style.display = 'none';
-            
-            document.querySelector('.camera-container').style.animation = 'flash 0.3s';
-            setTimeout(() => {
-                document.querySelector('.camera-container').style.animation = '';
-            }, 300);
-        }
-
-        // Guardar producto en Firebase
-        async function saveProduct() {
-            let name = document.getElementById('name').value.trim();
-            let price = document.getElementById('price').value;
-            let concept = document.getElementById('concept').value.trim();
-
-            if (!name) {
-                alert('⚠️ Escribe el nombre de la empanada');
-                return;
-            }
-            
-            if (!price || price <= 0) {
-                alert('⚠️ Ingresa un precio válido');
-                return;
-            }
-            
-            if (!concept) {
-                alert('⚠️ Describe los ingredientes');
-                return;
-            }
-            
-            if (!currentPhoto) {
-                alert('⚠️ Toma una foto de la empanada');
-                return;
-            }
-
-            showLoading('Subiendo imagen...');
-
-            try {
-                // Convertir base64 a blob
-                const response = await fetch(currentPhoto);
-                const blob = await response.blob();
-                
-                // Crear nombre único para la imagen
-                const imageName = `empanadas/${Date.now()}.jpg`;
-                
-                // Subir imagen a Storage
-                const storageRef = storage.ref().child(imageName);
-                await storageRef.put(blob);
-                
-                // Obtener URL de la imagen
-                const imageUrl = await storageRef.getDownloadURL();
-
-                showLoading('Guardando producto...');
-
-                // Guardar datos en Firestore
-                await db.collection('products').add({
-                    name: name,
-                    price: parseFloat(price),
-                    concept: concept,
-                    imageUrl: imageUrl,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-
-                // Limpiar formulario
-                document.getElementById('name').value = '';
-                document.getElementById('price').value = '';
-                document.getElementById('concept').value = '';
-                document.getElementById('photoPreview').innerHTML = '';
-                document.getElementById('photoPreview').style.display = 'none';
-                video.style.display = 'block';
-                currentPhoto = null;
-
-                hideLoading();
-                alert('✅ Producto guardado con éxito');
-                
-                // Recargar productos
-                loadProducts();
-
-                if (navigator.vibrate) {
-                    navigator.vibrate(200);
-                }
-
-            } catch (error) {
-                hideLoading();
-                alert('Error al guardar: ' + error.message);
-                console.error(error);
-            }
-        }
-
-        // Cargar productos desde Firebase
-        async function loadProducts() {
-            try {
-                const snapshot = await db.collection('products')
-                    .orderBy('createdAt', 'desc')
-                    .get();
-                
-                const products = [];
-                snapshot.forEach(doc => {
-                    products.push({
-                        id: doc.id,
-                        ...doc.data()
-                    });
-                });
-
-                displayProducts(products);
-            } catch (error) {
-                console.error('Error cargando productos:', error);
-            }
-        }
-
-        // Mostrar productos
-        function displayProducts(products) {
-            let list = document.getElementById('productsList');
-            list.innerHTML = '';
-            
-            if (products.length === 0) {
-                list.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: white; font-size: 1.5em; padding: 50px;">📭 No hay productos aún</div>';
-                return;
-            }
-            
-            products.forEach(product => {
-                let card = document.createElement('div');
-                card.className = 'product-card';
-                card.innerHTML = `
-                    <img src="${product.imageUrl}" class="product-image" loading="lazy">
-                    <div class="product-name">${product.name}</div>
-                    <div class="product-price">$${product.price.toFixed(2)}</div>
-                    <div class="product-concept">${product.concept}</div>
-                    <button class="delete-btn" onclick="deleteProduct('${product.id}', '${product.imageUrl}')">🗑️ ELIMINAR</button>
-                `;
-                list.appendChild(card);
             });
-        }
+            
+            masBtn.addEventListener('click', () => {
+                cantidad++;
+                cantidadSpan.textContent = cantidad;
+            });
+            
+            agregarBtn.addEventListener('click', () => {
+                agregarAlCarrito(card, cantidad);
+                // Mostrar mensaje visual
+                agregarBtn.textContent = '✓ AGREGADO';
+                setTimeout(() => {
+                    agregarBtn.textContent = 'AGREGAR';
+                }, 1000);
+            });
+        });
 
-        // Eliminar producto
-        async function deleteProduct(productId, imageUrl) {
-            if (!confirm('¿Eliminar esta empanada? Esto afectará a la tienda.')) {
+        // Función para pedir por WhatsApp
+        document.getElementById('whatsapp-btn').addEventListener('click', function() {
+            if (carrito.length === 0) {
+                alert('Agrega productos al carrito primero');
                 return;
             }
-
-            showLoading('Eliminando...');
-
-            try {
-                // Eliminar imagen de Storage
-                if (imageUrl) {
-                    const imageRef = storage.refFromURL(imageUrl);
-                    await imageRef.delete();
-                }
-
-                // Eliminar documento de Firestore
-                await db.collection('products').doc(productId).delete();
-
-                hideLoading();
-                alert('✅ Producto eliminado');
-                loadProducts();
-
-                if (navigator.vibrate) {
-                    navigator.vibrate(100);
-                }
-
-            } catch (error) {
-                hideLoading();
-                alert('Error al eliminar: ' + error.message);
-                console.error(error);
-            }
-        }
-
-        // Inicializar
-        window.addEventListener('load', () => {
-            loadProducts();
-            setTimeout(startCamera, 500);
-        });
-
-        // Pausar cámara
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden && video.srcObject) {
-                video.srcObject.getTracks().forEach(track => track.stop());
-            } else if (!document.hidden) {
-                startCamera();
+            
+            // Solicitar número de teléfono
+            const telefonoCliente = prompt('📱 Por favor ingresa tu número de teléfono (para confirmar el pedido):');
+            
+            if (!telefonoCliente) return; // Si cancela, no hacer nada
+            
+            // Crear mensaje del pedido
+            let mensaje = '🍽️ *NUEVO PEDIDO - NILAS EMPANADAS* 🍽️\n\n';
+            mensaje += '*CLIENTE:* ' + telefonoCliente + '\n';
+            mensaje += '*PEDIDO:*\n';
+            
+            carrito.forEach(item => {
+                mensaje += `• ${item.cantidad}x ${item.nombre} - $${(item.precio * item.cantidad).toFixed(2)}\n`;
+            });
+            
+            const total = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+            mensaje += `\n💰 *TOTAL: $${total.toFixed(2)}*`;
+            
+            // Codificar mensaje para URL
+            const mensajeCodificado = encodeURIComponent(mensaje);
+            
+            // Crear URL de WhatsApp
+            const url = `https://wa.me/${numeroWhatsApp}?text=${mensajeCodificado}`;
+            
+            // Abrir WhatsApp
+            window.open(url, '_blank');
+            
+            // Opcional: limpiar carrito después de pedir
+            if (confirm('¿Deseas vaciar el carrito después de este pedido?')) {
+                carrito = [];
+                actualizarCarrito();
             }
         });
 
-        // Animación flash
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes flash {
-                0%, 100% { opacity: 1; }
-                50% { opacity: 0.5; background: white; }
-            }
-        `;
-        document.head.appendChild(style);
+        // Inicializar carrito
+        actualizarCarrito();
     </script>
 </body>
 </html>
