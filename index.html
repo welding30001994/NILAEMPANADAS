@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NILAS EMPANADAS | Menú Futurista</title>
+    <title>NILAS EMPANADAS | ADMINISTRADOR DE STOCK</title>
     <style>
         * {
             margin: 0;
@@ -12,111 +12,290 @@
             font-family: 'Arial Black', Gadget, sans-serif;
         }
 
-        /* Fondo general */
         body {
             background: linear-gradient(rgba(255, 0, 0, 0.15), rgba(255, 255, 255, 0.95));
             min-height: 100vh;
-            padding-top: 8rem;
+            padding: 2rem 5%;
         }
 
-        /* Carrito superior fijo */
-        .carrito-superior {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
+        /* Encabezado administrador */
+        .admin-header {
             background: rgba(0, 0, 0, 0.9);
-            color: #ffffff;
-            padding: 1rem 5%;
+            color: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            z-index: 1000;
-            box-shadow: 0 2px 15px rgba(255, 0, 0, 0.5);
+            flex-wrap: wrap;
+            gap: 1rem;
+            border: 2px solid #ff0000;
         }
 
-        .carrito-titulo {
+        .admin-titulo {
             color: #ff0000;
-            font-size: 1.5rem;
+            font-size: 2rem;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .carrito-icono {
-            font-size: 1.8rem;
-        }
-
-        .carrito-contenido {
+        .admin-botones {
             display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            max-width: 70%;
-        }
-
-        .carrito-items {
-            font-size: 0.9rem;
-            color: #ffd700;
-        }
-
-        .carrito-total {
-            font-size: 1.1rem;
-            color: #ffffff;
-        }
-
-        /* Animación del carrito */
-        @keyframes vibrar {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        .carrito-actualizado {
-            animation: vibrar 0.3s ease;
-        }
-
-        /* Barra de notificación */
-        .notificacion-agregado {
-            position: fixed;
-            top: 6rem;
-            right: 2rem;
-            background: rgba(0, 0, 0, 0.9);
-            color: #ffd700;
-            padding: 1rem 2rem;
-            border-radius: 10px;
-            border-left: 5px solid #ff0000;
-            z-index: 999;
-            transform: translateX(400px);
-            transition: transform 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .notificacion-agregado.mostrar {
-            transform: translateX(0);
-        }
-
-        .notificacion-contenido {
-            display: flex;
-            align-items: center;
             gap: 1rem;
         }
 
-        .notificacion-icono {
-            font-size: 2rem;
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
         }
 
-        .notificacion-texto h4 {
-            color: #ff0000;
-            margin-bottom: 0.3rem;
+        .btn-verde {
+            background: #28a745;
+            color: white;
         }
 
-        .notificacion-texto p {
+        .btn-verde:hover {
+            background: #218838;
+            transform: scale(1.05);
+        }
+
+        .btn-rojo {
+            background: #ff0000;
+            color: white;
+        }
+
+        .btn-rojo:hover {
+            background: #dc3545;
+            transform: scale(1.05);
+        }
+
+        .btn-azul {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-azul:hover {
+            background: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .btn-amarillo {
+            background: #ffd700;
+            color: black;
+        }
+
+        .btn-amarillo:hover {
+            background: #ffc107;
+            transform: scale(1.05);
+        }
+
+        /* Barra de estado */
+        .estado-bar {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #ffd700;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .ultima-actualizacion {
+            color: #333;
             font-family: Arial, sans-serif;
+        }
+
+        .stock-total {
+            color: #ff0000;
+            font-size: 1.2rem;
+        }
+
+        /* Contenedor del menú */
+        .menu-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Tarjetas de empanadas en admin */
+        .empanada-card-admin {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(255, 0, 0, 0.6);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .empanada-card-admin:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .empanada-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .empanada-nombre {
+            font-size: 1.5rem;
+            color: #ff0000;
+            text-transform: uppercase;
+        }
+
+        .empanada-precio {
+            font-size: 1.3rem;
+            color: #000;
+            background: rgba(255, 215, 0, 0.2);
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+        }
+
+        .empanada-descripcion {
+            font-family: Arial, sans-serif;
+            color: #666;
+            margin-bottom: 1.5rem;
             font-size: 0.9rem;
         }
 
-        /* Modal de datos del cliente */
-        .modal-cliente {
+        /* Control de stock */
+        .stock-control {
+            background: rgba(0, 0, 0, 0.05);
+            padding: 1rem;
+            border-radius: 10px;
+        }
+
+        .stock-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .stock-label {
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+
+        .stock-cantidad {
+            font-size: 1.8rem;
+            color: #ff0000;
+            font-weight: bold;
+        }
+
+        .stock-estado {
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .stock-disponible {
+            background: #28a745;
+            color: white;
+        }
+
+        .stock-bajo {
+            background: #ffc107;
+            color: black;
+        }
+
+        .stock-agotado {
+            background: #dc3545;
+            color: white;
+        }
+
+        .stock-botones {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stock-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .stock-btn-menos {
+            background: #ff0000;
+            color: white;
+        }
+
+        .stock-btn-menos:hover {
+            background: #dc3545;
+        }
+
+        .stock-btn-mas {
+            background: #28a745;
+            color: white;
+        }
+
+        .stock-btn-mas:hover {
+            background: #218838;
+        }
+
+        .stock-numero {
+            font-size: 1.2rem;
+            min-width: 50px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .stock-input {
+            width: 80px;
+            padding: 0.5rem;
+            text-align: center;
+            border: 2px solid #ff0000;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .stock-agotado-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .stock-agotado-btn:hover {
+            background: #c82333;
+        }
+
+        /* Botones globales */
+        .acciones-globales {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        /* Modal de confirmación */
+        .modal-confirm {
             display: none;
             position: fixed;
             z-index: 3000;
@@ -129,909 +308,268 @@
             justify-content: center;
         }
 
-        .modal-cliente-contenido {
+        .modal-confirm-contenido {
             background: rgba(0, 0, 0, 0.95);
             padding: 2rem;
             border-radius: 15px;
             border: 2px solid #ff0000;
             max-width: 400px;
             width: 90%;
-            position: relative;
+            text-align: center;
         }
 
-        .modal-cliente-titulo {
+        .modal-confirm-titulo {
             color: #ff0000;
             font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
+            margin-bottom: 1rem;
         }
 
-        .modal-cliente-subtitulo {
-            color: #ffd700;
+        .modal-confirm-texto {
+            color: white;
             font-family: Arial, sans-serif;
             margin-bottom: 2rem;
-            text-align: center;
-            font-size: 0.9rem;
         }
 
-        .campo-form {
-            margin-bottom: 1.5rem;
-        }
-
-        .campo-form label {
-            display: block;
-            color: #ffffff;
-            margin-bottom: 0.5rem;
-            font-family: Arial, sans-serif;
-            font-size: 0.9rem;
-        }
-
-        .campo-form input {
-            width: 100%;
-            padding: 0.8rem;
-            border-radius: 10px;
-            border: 2px solid #ff0000;
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            font-family: Arial, sans-serif;
-        }
-
-        .campo-form input:focus {
-            outline: none;
-            border-color: #ffd700;
-        }
-
-        .modal-cliente-botones {
+        .modal-confirm-botones {
             display: flex;
             gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .btn-modal {
-            flex: 1;
-            padding: 0.8rem;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-family: 'Arial Black', Gadget, sans-serif;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-        }
-
-        .btn-confirmar {
-            background: #ff0000;
-            color: #ffffff;
-        }
-
-        .btn-confirmar:hover {
-            background: #ffd700;
-            color: #000000;
-        }
-
-        .btn-cancelar {
-            background: #333333;
-            color: #ffffff;
-        }
-
-        .btn-cancelar:hover {
-            background: #666666;
-        }
-
-        .cerrar-modal-cliente {
-            position: absolute;
-            top: 1rem;
-            right: 1.5rem;
-            color: #ff0000;
-            font-size: 2rem;
-            cursor: pointer;
-        }
-
-        .cerrar-modal-cliente:hover {
-            color: #ffd700;
-        }
-
-        /* Encabezado del negocio */
-        header {
-            text-align: center;
-            margin-bottom: 2rem;
-            padding: 0 5%;
-        }
-
-        .logo-titulo {
-            font-size: 3.5rem;
-            background: linear-gradient(90deg, #ff0000, #ffd700);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        .descripcion-masa {
-            font-size: 1.1rem;
-            color: #333333;
-            margin: 1rem 0;
-            font-family: Arial, sans-serif;
-            font-style: italic;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .info-negocio {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 1rem;
-            color: #000000;
-            font-size: 1rem;
-        }
-
-        /* Modal de imagen ampliada */
-        .modal-imagen {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            align-items: center;
             justify-content: center;
         }
 
-        .modal-contenido {
-            max-width: 90%;
-            max-height: 90%;
-        }
-
-        .cerrar-modal {
-            position: absolute;
-            top: 2rem;
-            right: 3rem;
-            color: #ff0000;
-            font-size: 3rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: color 0.2s ease;
-        }
-
-        .cerrar-modal:hover {
-            color: #ffd700;
-        }
-
-        /* Contenedor del menú */
-        .menu-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2.5rem;
-            padding: 0 5% 4rem;
-        }
-
-        /* Tarjetas de empanadas */
-        .empanada-card {
-            background: rgba(255, 255, 255, 0.8);
-            border: 2px solid rgba(255, 0, 0, 0.6);
-            border-radius: 15px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .empanada-card::after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 40%;
-            height: 15%;
-            background: linear-gradient(45deg, rgba(255, 215, 0, 0.3), transparent);
-            border-top-left-radius: 50%;
-        }
-
-        .empanada-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-            background: rgba(255, 255, 255, 1);
-        }
-
-        /* Contenedor de imagen de empanada */
-        .empanada-img-container {
-            width: 100%;
-            height: 220px;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            cursor: pointer;
-            overflow: hidden;
-            border: 1px solid #ffd700;
-        }
-
-        .empanada-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .empanada-img-container:hover .empanada-img {
-            transform: scale(1.05);
-        }
-
-        /* Detalles de la empanada */
-        .empanada-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .empanada-nombre {
-            font-size: 1.6rem;
-            color: #ff0000;
-            text-transform: uppercase;
-        }
-
-        .empanada-precio {
-            font-size: 1.5rem;
-            color: #000000;
-            background: rgba(255, 215, 0, 0.2);
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-        }
-
-        .empanada-descripcion {
-            font-size: 0.95rem;
-            color: #333333;
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-            font-family: Arial, sans-serif;
-        }
-
-        /* Controles de cantidad y botón */
-        .control-container {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .cantidad-btn {
-            background: #ff0000;
-            color: #ffffff;
-            border: none;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: background 0.2s ease;
-        }
-
-        .cantidad-btn:hover {
-            background: #ffd700;
-            color: #000000;
-        }
-
-        .cantidad-numero {
-            font-size: 1.1rem;
-            min-width: 30px;
-            text-align: center;
-            color: #000000;
-        }
-
-        .agregar-btn {
-            background: #000000;
-            color: #ffffff;
-            border: none;
-            padding: 0.7rem 1.5rem;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            margin-left: auto;
-        }
-
-        .agregar-btn:hover {
-            background: #ffd700;
-            color: #000000;
-        }
-
-        /* Sección de salsas */
-        .salsas-section {
-            padding: 2rem 5%;
-            background: rgba(255, 0, 0, 0.1);
-            margin: 0 5% 3rem;
-            border-radius: 15px;
-            text-align: center;
-        }
-
-        .salsas-titulo {
-            font-size: 1.8rem;
-            color: #ff0000;
-            margin-bottom: 1rem;
-        }
-
-        .salsas-lista {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1.5rem;
-            font-size: 1.1rem;
-            color: #000000;
-            font-family: Arial, sans-serif;
-        }
-
-        /* Botón de WhatsApp */
-        .whatsapp-btn {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: rgba(37, 211, 102, 0.9);
-            color: #ffffff;
-            padding: 1rem 1.5rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-size: 1rem;
-            z-index: 900;
-            transition: transform 0.2s ease;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .whatsapp-btn:hover {
-            transform: scale(1.05);
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
-            .carrito-superior {
+            .admin-header {
                 flex-direction: column;
-                gap: 1rem;
-                padding: 1rem;
-            }
-
-            .carrito-contenido {
-                max-width: 100%;
                 text-align: center;
             }
-
-            .logo-titulo {
-                font-size: 2.5rem;
-            }
-
-            .descripcion-masa {
-                font-size: 0.9rem;
-                padding: 0 1rem;
-            }
-
-            .info-negocio {
-                flex-direction: column;
-                gap: 0.5rem;
-                text-align: center;
-            }
-
-            .control-container {
+            
+            .stock-botones {
                 flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .agregar-btn {
-                margin-left: 0;
-                width: 100%;
-                margin-top: 1rem;
-            }
-
-            .cerrar-modal {
-                top: 1rem;
-                right: 1.5rem;
-                font-size: 2rem;
-            }
-
-            .notificacion-agregado {
-                top: 8rem;
-                right: 1rem;
-                left: 1rem;
-                transform: translateY(-400px);
-            }
-
-            .notificacion-agregado.mostrar {
-                transform: translateY(0);
             }
         }
     </style>
 </head>
 <body>
-    <!-- Carrito superior fijo -->
-    <div class="carrito-superior">
-        <h2 class="carrito-titulo">
-            <span class="carrito-icono">🥟</span>
-            NILAS EMPANADAS
-        </h2>
-        <div class="carrito-contenido">
-            <div class="carrito-items" id="carrito-items">No hay productos agregados</div>
-            <div class="carrito-total" id="carrito-total">Total: $0.00</div>
+    <!-- Encabezado administrador -->
+    <div class="admin-header">
+        <div class="admin-titulo">
+            <span>⚙️</span>
+            NILAS EMPANADAS - ADMINISTRADOR DE STOCK
+        </div>
+        <div class="admin-botones">
+            <a href="home.html" class="btn btn-verde">🏠 IR A TIENDA</a>
+            <button class="btn btn-amarillo" id="guardarStock">💾 GUARDAR STOCK</button>
         </div>
     </div>
 
-    <!-- Notificación de producto agregado -->
-    <div class="notificacion-agregado" id="notificacion-agregado">
-        <div class="notificacion-contenido">
-            <div class="notificacion-icono">🥟✨</div>
-            <div class="notificacion-texto">
-                <h4>¡AGREGADO!</h4>
-                <p id="notificacion-mensaje">Producto al carrito</p>
-            </div>
+    <!-- Barra de estado -->
+    <div class="estado-bar">
+        <div class="ultima-actualizacion" id="ultimaActualizacion">
+            ⏱️ Última actualización: Nunca
+        </div>
+        <div class="stock-total" id="stockTotal">
+            📦 Stock total: 0 unidades
         </div>
     </div>
 
-    <!-- Modal para datos del cliente -->
-    <div class="modal-cliente" id="modal-cliente">
-        <div class="modal-cliente-contenido">
-            <span class="cerrar-modal-cliente" id="cerrar-modal-cliente">&times;</span>
-            <h2 class="modal-cliente-titulo">🥟 NILAS EMPANADAS</h2>
-            <p class="modal-cliente-subtitulo">Completa tus datos para el envío</p>
-            
-            <div class="campo-form">
-                <label>👤 Nombre completo *</label>
-                <input type="text" id="cliente-nombre" placeholder="Ej: Juan Pérez">
-            </div>
-            
-            <div class="campo-form">
-                <label>📱 Teléfono *</label>
-                <input type="tel" id="cliente-telefono" placeholder="Ej: 0987654321">
-            </div>
-            
-            <div class="campo-form">
-                <label>📍 Dirección de entrega *</label>
-                <input type="text" id="cliente-direccion" placeholder="Ej: Domingo Comín y 8 de Diciembre">
-            </div>
-            
-            <div class="modal-cliente-botones">
-                <button class="btn-modal btn-cancelar" id="cancelar-pedido">Cancelar</button>
-                <button class="btn-modal btn-confirmar" id="confirmar-pedido">Enviar a WhatsApp</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal para imagen ampliada -->
-    <div class="modal-imagen" id="modal-imagen">
-        <span class="cerrar-modal" id="cerrar-modal">&times;</span>
-        <img class="modal-contenido" id="imagen-ampliada">
-    </div>
-
-    <!-- Encabezado -->
-    <header>
-        <h1 class="logo-titulo">NILAS EMPANADAS</h1>
-        <p class="descripcion-masa">
-            🥟 Empanadas elaboradas con masa artesanal de harina de trigo, sin levadura, crujientes y recién hechas.
-        </p>
-        <div class="info-negocio">
-            <p>📍 Domingo Comín y 8 de Diciembre, Sucúa</p>
-            <p>🕒 8:00 am – 1:00 pm | 3:00 pm – 10:00 pm</p>
-            <p>📱 +593 95 959 2511</p>
-        </div>
-    </header>
-
-    <!-- Contenedor del menú -->
-    <main class="menu-container">
-        <!-- Empanada Hawaiana -->
-        <div class="empanada-card" data-nombre="Hawaiana" data-precio="1.50">
-            <div class="empanada-img-container" onclick="ampliarImagen(this)">
-                <img src="https://raw.githubusercontent.com/welding30001994/NILAEMPANADAS/refs/heads/main/EMPANADAS.jpg" alt="Empanada Hawaiana" class="empanada-img">
-            </div>
-            <div class="empanada-header">
-                <h3 class="empanada-nombre">Hawaiana</h3>
-                <span class="empanada-precio">$1.50</span>
-            </div>
-            <p class="empanada-descripcion">Mezcla tropical de piña, queso mozzarella y salchichas.</p>
-            <div class="control-container">
-                <button class="cantidad-btn menos">-</button>
-                <span class="cantidad-numero">1</span>
-                <button class="cantidad-btn mas">+</button>
-                <button class="agregar-btn">Agregar</button>
-            </div>
-        </div>
-
-        <!-- Empanada Choris Queso -->
-        <div class="empanada-card" data-nombre="Choris Queso" data-precio="1.75">
-            <div class="empanada-img-container" onclick="ampliarImagen(this)">
-                <img src="https://raw.githubusercontent.com/welding30001994/NILAEMPANADAS/refs/heads/main/EMPANADAS.jpg" alt="Empanada Choris Queso" class="empanada-img">
-            </div>
-            <div class="empanada-header">
-                <h3 class="empanada-nombre">Choris Queso</h3>
-                <span class="empanada-precio">$1.75</span>
-            </div>
-            <p class="empanada-descripcion">Delicioso chorizo ahumado con queso mozzarella derretido.</p>
-            <div class="control-container">
-                <button class="cantidad-btn menos">-</button>
-                <span class="cantidad-numero">1</span>
-                <button class="cantidad-btn mas">+</button>
-                <button class="agregar-btn">Agregar</button>
-            </div>
-        </div>
-
-        <!-- Empanada Napolitano -->
-        <div class="empanada-card" data-nombre="Napolitano" data-precio="1.75">
-            <div class="empanada-img-container" onclick="ampliarImagen(this)">
-                <img src="https://raw.githubusercontent.com/welding30001994/NILAEMPANADAS/refs/heads/main/EMPANADAS.jpg" alt="Empanada Napolitano" class="empanada-img">
-            </div>
-            <div class="empanada-header">
-                <h3 class="empanada-nombre">Napolitano</h3>
-                <span class="empanada-precio">$1.75</span>
-            </div>
-            <p class="empanada-descripcion">Carne molida con queso y un toque especial estilo lasaña.</p>
-            <div class="control-container">
-                <button class="cantidad-btn menos">-</button>
-                <span class="cantidad-numero">1</span>
-                <button class="cantidad-btn mas">+</button>
-                <button class="agregar-btn">Agregar</button>
-            </div>
-        </div>
-
-        <!-- Empanada Pizza -->
-        <div class="empanada-card" data-nombre="Pizza" data-precio="1.50">
-            <div class="empanada-img-container" onclick="ampliarImagen(this)">
-                <img src="https://raw.githubusercontent.com/welding30001994/NILAEMPANADAS/refs/heads/main/EMPANADAS.jpg" alt="Empanada Pizza" class="empanada-img">
-            </div>
-            <div class="empanada-header">
-                <h3 class="empanada-nombre">Pizza</h3>
-                <span class="empanada-precio">$1.50</span>
-            </div>
-            <p class="empanada-descripcion">Salsa de pizza, peperones y jamón al estilo clásico.</p>
-            <div class="control-container">
-                <button class="cantidad-btn menos">-</button>
-                <span class="cantidad-numero">1</span>
-                <button class="cantidad-btn mas">+</button>
-                <button class="agregar-btn">Agregar</button>
-            </div>
-        </div>
-
-        <!-- Empanada BBQ -->
-        <div class="empanada-card" data-nombre="BBQ" data-precio="1.75">
-            <div class="empanada-img-container" onclick="ampliarImagen(this)">
-                <img src="https://raw.githubusercontent.com/welding30001994/NILAEMPANADAS/refs/heads/main/EMPANADAS.jpg" alt="Empanada BBQ" class="empanada-img">
-            </div>
-            <div class="empanada-header">
-                <h3 class="empanada-nombre">BBQ</h3>
-                <span class="empanada-precio">$1.75</span>
-            </div>
-            <p class="empanada-descripcion">Carne molida con deliciosa salsa bbq.</p>
-            <div class="control-container">
-                <button class="cantidad-btn menos">-</button>
-                <span class="cantidad-numero">1</span>
-                <button class="cantidad-btn mas">+</button>
-                <button class="agregar-btn">Agregar</button>
-            </div>
-        </div>
-
-        <!-- Empanada Taquera -->
-        <div class="empanada-card" data-nombre="Taquera" data-precio="1.75">
-            <div class="empanada-img-container" onclick="ampliarImagen(this)">
-                <img src="https://raw.githubusercontent.com/welding30001994/NILAEMPANADAS/refs/heads/main/EMPANADAS.jpg" alt="Empanada Taquera" class="empanada-img">
-            </div>
-            <div class="empanada-header">
-                <h3 class="empanada-nombre">Taquera</h3>
-                <span class="empanada-precio">$1.75</span>
-            </div>
-            <p class="empanada-descripcion">Carne molida con frijoles al estilo taquero.</p>
-            <div class="control-container">
-                <button class="cantidad-btn menos">-</button>
-                <span class="cantidad-numero">1</span>
-                <button class="cantidad-btn mas">+</button>
-                <button class="agregar-btn">Agregar</button>
-            </div>
-        </div>
-
-        <!-- Empanada Pollo -->
-        <div class="empanada-card" data-nombre="Pollo" data-precio="1.50">
-            <div class="empanada-img-container" onclick="ampliarImagen(this)">
-                <img src="https://raw.githubusercontent.com/welding30001994/NILAEMPANADAS/refs/heads/main/EMPANADAS.jpg" alt="Empanada Pollo" class="empanada-img">
-            </div>
-            <div class="empanada-header">
-                <h3 class="empanada-nombre">Pollo</h3>
-                <span class="empanada-precio">$1.50</span>
-            </div>
-            <p class="empanada-descripcion">Pollo sazonado con zanahoria y alverja.</p>
-            <div class="control-container">
-                <button class="cantidad-btn menos">-</button>
-                <span class="cantidad-numero">1</span>
-                <button class="cantidad-btn mas">+</button>
-                <button class="agregar-btn">Agregar</button>
-            </div>
-        </div>
-
-        <!-- Empanada Carne -->
-        <div class="empanada-card" data-nombre="Carne" data-precio="1.50">
-            <div class="empanada-img-container" onclick="ampliarImagen(this)">
-                <img src="https://raw.githubusercontent.com/welding30001994/NILAEMPANADAS/refs/heads/main/EMPANADAS.jpg" alt="Empanada Carne" class="empanada-img">
-            </div>
-            <div class="empanada-header">
-                <h3 class="empanada-nombre">Carne</h3>
-                <span class="empanada-precio">$1.50</span>
-            </div>
-            <p class="empanada-descripcion">Carne molida con zanahoria y alverjas.</p>
-            <div class="control-container">
-                <button class="cantidad-btn menos">-</button>
-                <span class="cantidad-numero">1</span>
-                <button class="cantidad-btn mas">+</button>
-                <button class="agregar-btn">Agregar</button>
-            </div>
-        </div>
-
-        <!-- Empanada Camaron -->
-        <div class="empanada-card" data-nombre="Camaron" data-precio="2.00">
-            <div class="empanada-img-container" onclick="ampliarImagen(this)">
-                <img src="https://raw.githubusercontent.com/welding30001994/NILAEMPANADAS/refs/heads/main/EMPANADAS.jpg" alt="Empanada Camaron" class="empanada-img">
-            </div>
-            <div class="empanada-header">
-                <h3 class="empanada-nombre">Camaron</h3>
-                <span class="empanada-precio">$2.00</span>
-            </div>
-            <p class="empanada-descripcion">Camarón en salsa con zanahoria y alverjas.</p>
-            <div class="control-container">
-                <button class="cantidad-btn menos">-</button>
-                <span class="cantidad-numero">1</span>
-                <button class="cantidad-btn mas">+</button>
-                <button class="agregar-btn">Agregar</button>
-            </div>
-        </div>
-
-        <!-- Empanada Queso Mozzarella -->
-        <div class="empanada-card" data-nombre="Queso Mozzarella" data-precio="2.00">
-            <div class="empanada-img-container" onclick="ampliarImagen(this)">
-                <img src="https://raw.githubusercontent.com/welding30001994/NILAEMPANADAS/refs/heads/main/EMPANADAS.jpg" alt="Empanada Queso Mozzarella" class="empanada-img">
-            </div>
-            <div class="empanada-header">
-                <h3 class="empanada-nombre">Queso Mozzarella</h3>
-                <span class="empanada-precio">$2.00</span>
-            </div>
-            <p class="empanada-descripcion">Empanada rellena de queso mozzarella derretido.</p>
-            <div class="control-container">
-                <button class="cantidad-btn menos">-</button>
-                <span class="cantidad-numero">1</span>
-                <button class="cantidad-btn mas">+</button>
-                <button class="agregar-btn">Agregar</button>
-            </div>
-        </div>
+    <!-- Contenedor del menú admin -->
+    <main class="menu-container" id="menu-admin">
+        <!-- Las tarjetas se generarán dinámicamente con JavaScript -->
     </main>
 
-    <!-- Sección de salsas -->
-    <section class="salsas-section">
-        <h2 class="salsas-titulo">🥫 SALSAS</h2>
-        <div class="salsas-lista">
-            <span>🔥 Salsa Ahumada</span>
-            <span>🥚 Mayonesa</span>
-            <span>🌶️ Salsa de ají</span>
-        </div>
-    </section>
+    <!-- Acciones globales -->
+    <div class="acciones-globales">
+        <button class="btn btn-verde" id="stockLleno">📦 LLENAR STOCK (50 c/u)</button>
+        <button class="btn btn-rojo" id="stockCero">🚫 TODO AGOTADO</button>
+        <button class="btn btn-azul" id="resetStock">🔄 RESETEAR STOCK PREDETERMINADO</button>
+    </div>
 
-    <!-- Botón de WhatsApp -->
-    <button class="whatsapp-btn" id="whatsapp-btn">📱 PEDIR POR WHATSAPP</button>
+    <!-- Modal de confirmación -->
+    <div class="modal-confirm" id="modalConfirm">
+        <div class="modal-confirm-contenido">
+            <h2 class="modal-confirm-titulo">⚠️ CONFIRMAR</h2>
+            <p class="modal-confirm-texto" id="modalConfirmTexto">¿Estás seguro de realizar esta acción?</p>
+            <div class="modal-confirm-botones">
+                <button class="btn btn-verde" id="confirmarSi">SÍ</button>
+                <button class="btn btn-rojo" id="confirmarNo">NO</button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // Variables globales
-        let carrito = [];
-        const numeroWhatsApp = '593959592511';
+        // Lista completa de empanadas con stock inicial
+        const empanadasData = [
+            { nombre: "Hawaiana", precio: 1.50, descripcion: "Mezcla tropical de piña, queso mozzarella y salchichas.", stock: 50 },
+            { nombre: "Choris Queso", precio: 1.75, descripcion: "Delicioso chorizo ahumado con queso mozzarella derretido.", stock: 50 },
+            { nombre: "Napolitano", precio: 1.75, descripcion: "Carne molida con queso y un toque especial estilo lasaña.", stock: 50 },
+            { nombre: "Pizza", precio: 1.50, descripcion: "Salsa de pizza, peperones y jamón al estilo clásico.", stock: 50 },
+            { nombre: "BBQ", precio: 1.75, descripcion: "Carne molida con deliciosa salsa bbq.", stock: 50 },
+            { nombre: "Taquera", precio: 1.75, descripcion: "Carne molida con frijoles al estilo taquero.", stock: 50 },
+            { nombre: "Pollo", precio: 1.50, descripcion: "Pollo sazonado con zanahoria y alverja.", stock: 50 },
+            { nombre: "Carne", precio: 1.50, descripcion: "Carne molida con zanahoria y alverjas.", stock: 50 },
+            { nombre: "Camaron", precio: 2.00, descripcion: "Camarón en salsa con zanahoria y alverjas.", stock: 50 },
+            { nombre: "Queso Mozzarella", precio: 2.00, descripcion: "Empanada rellena de queso mozzarella derretido.", stock: 50 }
+        ];
 
-        // Función para ampliar imagen
-        function ampliarImagen(elemento) {
-            const img = elemento.querySelector('.empanada-img');
-            const modal = document.getElementById('modal-imagen');
-            const imgAmpliada = document.getElementById('imagen-ampliada');
-            
-            if (img && img.src) {
-                imgAmpliada.src = img.src;
-                modal.style.display = 'flex';
-            }
-        }
+        let empanadas = [...empanadasData];
+        let accionConfirmar = null;
 
-        // Cerrar modal de imagen
-        document.getElementById('cerrar-modal').addEventListener('click', function() {
-            document.getElementById('modal-imagen').style.display = 'none';
-        });
-
-        document.getElementById('modal-imagen').addEventListener('click', function(e) {
-            if (e.target === this) {
-                this.style.display = 'none';
-            }
-        });
-
-        // Función para mostrar notificación
-        function mostrarNotificacion(nombreProducto, cantidad) {
-            const notificacion = document.getElementById('notificacion-agregado');
-            const mensaje = document.getElementById('notificacion-mensaje');
-            
-            mensaje.textContent = `${cantidad}x ${nombreProducto} al carrito`;
-            notificacion.classList.add('mostrar');
-            
-            // Animar carrito
-            const carritoSuperior = document.querySelector('.carrito-superior');
-            carritoSuperior.classList.add('carrito-actualizado');
-            setTimeout(() => {
-                carritoSuperior.classList.remove('carrito-actualizado');
-            }, 300);
-            
-            setTimeout(() => {
-                notificacion.classList.remove('mostrar');
-            }, 2000);
-        }
-
-        // Función para actualizar el carrito en el HTML
-        function actualizarCarrito() {
-            const carritoItems = document.getElementById('carrito-items');
-            const carritoTotal = document.getElementById('carrito-total');
-            
-            if (carrito.length === 0) {
-                carritoItems.textContent = 'No hay productos agregados';
-                carritoTotal.textContent = 'Total: $0.00';
-                return;
-            }
-            
-            // Crear resumen de items
-            const itemsResumen = carrito.map(item => `${item.cantidad}x ${item.nombre}`).join(' • ');
-            carritoItems.textContent = itemsResumen;
-            
-            // Calcular total
-            const total = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
-            carritoTotal.textContent = `Total: $${total.toFixed(2)}`;
-        }
-
-        // Función para agregar al carrito
-        function agregarAlCarrito(card, cantidad) {
-            const nombre = card.dataset.nombre;
-            const precio = parseFloat(card.dataset.precio);
-            
-            // Verificar si ya existe en el carrito
-            const existeIndex = carrito.findIndex(item => item.nombre === nombre);
-            
-            if (existeIndex >= 0) {
-                // Actualizar cantidad
-                carrito[existeIndex].cantidad += cantidad;
-            } else {
-                // Agregar nuevo item
-                carrito.push({
-                    nombre: nombre,
-                    precio: precio,
-                    cantidad: cantidad
-                });
-            }
-            
-            actualizarCarrito();
-            mostrarNotificacion(nombre, cantidad);
-        }
-
-        // Configurar todas las tarjetas de empanadas
-        document.querySelectorAll('.empanada-card').forEach(card => {
-            const menosBtn = card.querySelector('.menos');
-            const masBtn = card.querySelector('.mas');
-            const cantidadSpan = card.querySelector('.cantidad-numero');
-            const agregarBtn = card.querySelector('.agregar-btn');
-            
-            let cantidad = 1;
-            
-            menosBtn.addEventListener('click', () => {
-                if (cantidad > 1) {
-                    cantidad--;
-                    cantidadSpan.textContent = cantidad;
-                }
-            });
-            
-            masBtn.addEventListener('click', () => {
-                cantidad++;
-                cantidadSpan.textContent = cantidad;
-            });
-            
-            agregarBtn.addEventListener('click', () => {
-                agregarAlCarrito(card, cantidad);
-                // Feedback visual en el botón
-                agregarBtn.textContent = '✓ AGREGADO';
-                setTimeout(() => {
-                    agregarBtn.textContent = 'AGREGAR';
-                }, 1000);
-            });
-        });
-
-        // Mostrar modal de datos del cliente
-        document.getElementById('whatsapp-btn').addEventListener('click', function() {
-            if (carrito.length === 0) {
-                alert('🥟 Agrega productos al carrito primero');
-                return;
-            }
-            
-            // Mostrar modal
-            document.getElementById('modal-cliente').style.display = 'flex';
-        });
-
-        // Cerrar modal
-        function cerrarModalCliente() {
-            document.getElementById('modal-cliente').style.display = 'none';
-        }
-
-        document.getElementById('cerrar-modal-cliente').addEventListener('click', cerrarModalCliente);
-        document.getElementById('cancelar-pedido').addEventListener('click', cerrarModalCliente);
-        
-        // Cerrar al hacer clic fuera del modal
-        document.getElementById('modal-cliente').addEventListener('click', function(e) {
-            if (e.target === this) {
-                cerrarModalCliente();
-            }
-        });
-
-        // Confirmar pedido y enviar a WhatsApp
-        document.getElementById('confirmar-pedido').addEventListener('click', function() {
-            const nombre = document.getElementById('cliente-nombre').value.trim();
-            const telefono = document.getElementById('cliente-telefono').value.trim();
-            const direccion = document.getElementById('cliente-direccion').value.trim();
-            
-            // Validar campos
-            if (!nombre || !telefono || !direccion) {
-                alert('⚠️ Por favor completa todos los campos');
-                return;
-            }
-            
-            // Validar teléfono básico
-            if (telefono.length < 7) {
-                alert('⚠️ Ingresa un número de teléfono válido');
-                return;
-            }
-            
-            // Crear mensaje del pedido
-            let mensaje = '🥟 *¡GRACIAS POR PEDIR EN NILAS EMPANADAS!* 🥟\n\n';
-            mensaje += '━━━━━━━━━━━━━━━━━━━\n';
-            mensaje += '*📍 DATOS DE ENTREGA*\n';
-            mensaje += '━━━━━━━━━━━━━━━━━━━\n';
-            mensaje += `👤 *Cliente:* ${nombre}\n`;
-            mensaje += `📱 *Teléfono:* ${telefono}\n`;
-            mensaje += `📍 *Dirección:* ${direccion}\n`;
-            mensaje += '━━━━━━━━━━━━━━━━━━━\n\n';
-            
-            mensaje += '*🍽️ DETALLE DEL PEDIDO*\n';
-            mensaje += '━━━━━━━━━━━━━━━━━━━\n';
-            
-            carrito.forEach(item => {
-                mensaje += `• ${item.cantidad}x ${item.nombre} - $${(item.precio * item.cantidad).toFixed(2)}\n`;
-            });
-            
-            mensaje += '━━━━━━━━━━━━━━━━━━━\n';
-            const total = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
-            mensaje += `💰 *TOTAL: $${total.toFixed(2)}*\n`;
-            mensaje += '━━━━━━━━━━━━━━━━━━━\n\n';
-            
-            mensaje += '🕒 *Tiempo de entrega aproximado:* 20-30 minutos\n';
-            mensaje += '💳 *Formas de pago:* Efectivo o transferencia\n\n';
-            mensaje += '✨ *¡Gracias por preferirnos!* ✨';
-            
-            // Codificar mensaje para URL
-            const mensajeCodificado = encodeURIComponent(mensaje);
-            
-            // Crear URL de WhatsApp
-            const url = `https://wa.me/${numeroWhatsApp}?text=${mensajeCodificado}`;
-            
-            // Cerrar modal
-            cerrarModalCliente();
-            
-            // Abrir WhatsApp
-            window.open(url, '_blank');
-            
-            // Opción para vaciar carrito
-            setTimeout(() => {
-                if (confirm('¿Deseas vaciar el carrito para un nuevo pedido?')) {
-                    carrito = [];
-                    actualizarCarrito();
+        // Cargar stock guardado al iniciar
+        function cargarStockGuardado() {
+            const stockGuardado = localStorage.getItem('nilasEmpanadasStock');
+            if (stockGuardado) {
+                try {
+                    const stockParseado = JSON.parse(stockGuardado);
+                    // Actualizar stock manteniendo los datos de las empanadas
+                    empanadas = empanadas.map(emp => {
+                        const encontrado = stockParseado.find(e => e.nombre === emp.nombre);
+                        return encontrado ? { ...emp, stock: encontrado.stock } : emp;
+                    });
                     
-                    // Limpiar campos del modal
-                    document.getElementById('cliente-nombre').value = '';
-                    document.getElementById('cliente-telefono').value = '';
-                    document.getElementById('cliente-direccion').value = '';
+                    const fechaGuardada = localStorage.getItem('nilasEmpanadasFecha');
+                    if (fechaGuardada) {
+                        document.getElementById('ultimaActualizacion').innerHTML = `⏱️ Última actualización: ${fechaGuardada}`;
+                    }
+                } catch (e) {
+                    console.error('Error al cargar stock:', e);
                 }
-            }, 500);
+            }
+            renderizarAdmin();
+        }
+
+        // Guardar stock
+        function guardarStock() {
+            const stockParaGuardar = empanadas.map(({ nombre, stock }) => ({ nombre, stock }));
+            localStorage.setItem('nilasEmpanadasStock', JSON.stringify(stockParaGuardar));
+            
+            const fecha = new Date();
+            const fechaStr = `${fecha.toLocaleDateString()} ${fecha.toLocaleTimeString()}`;
+            localStorage.setItem('nilasEmpanadasFecha', fechaStr);
+            
+            document.getElementById('ultimaActualizacion').innerHTML = `⏱️ Última actualización: ${fechaStr}`;
+            
+            // Mostrar notificación
+            alert('✅ Stock guardado correctamente');
+            
+            renderizarAdmin();
+        }
+
+        // Renderizar panel admin
+        function renderizarAdmin() {
+            const container = document.getElementById('menu-admin');
+            container.innerHTML = '';
+            
+            let stockTotal = 0;
+            
+            empanadas.forEach((emp, index) => {
+                stockTotal += emp.stock;
+                
+                const estadoStock = emp.stock <= 0 ? 'AGOTADO' : emp.stock <= 10 ? 'STOCK BAJO' : 'DISPONIBLE';
+                const estadoClass = emp.stock <= 0 ? 'stock-agotado' : emp.stock <= 10 ? 'stock-bajo' : 'stock-disponible';
+                
+                const card = document.createElement('div');
+                card.className = 'empanada-card-admin';
+                card.innerHTML = `
+                    <div class="empanada-header">
+                        <h3 class="empanada-nombre">${emp.nombre}</h3>
+                        <span class="empanada-precio">$${emp.precio.toFixed(2)}</span>
+                    </div>
+                    <p class="empanada-descripcion">${emp.descripcion}</p>
+                    
+                    <div class="stock-control">
+                        <div class="stock-info">
+                            <span class="stock-label">📦 STOCK ACTUAL</span>
+                            <span class="stock-cantidad" id="stock-cant-${index}">${emp.stock}</span>
+                            <span class="stock-estado ${estadoClass}">${estadoStock}</span>
+                        </div>
+                        
+                        <div class="stock-botones">
+                            <button class="stock-btn stock-btn-menos" onclick="actualizarStock(${index}, -1)">−</button>
+                            <input type="number" class="stock-input" id="input-${index}" value="${emp.stock}" min="0" max="999" onchange="actualizarStockInput(${index}, this.value)">
+                            <button class="stock-btn stock-btn-mas" onclick="actualizarStock(${index}, 1)">+</button>
+                            <button class="stock-agotado-btn" onclick="actualizarStock(${index}, -${emp.stock})">🚫 AGOTAR</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            
+            document.getElementById('stockTotal').innerHTML = `📦 Stock total: ${stockTotal} unidades`;
+        }
+
+        // Actualizar stock (relativo)
+        window.actualizarStock = function(index, cambio) {
+            const nuevaCantidad = empanadas[index].stock + cambio;
+            if (nuevaCantidad >= 0) {
+                empanadas[index].stock = nuevaCantidad;
+                renderizarAdmin();
+            }
+        };
+
+        // Actualizar stock por input
+        window.actualizarStockInput = function(index, valor) {
+            const nuevaCantidad = parseInt(valor) || 0;
+            if (nuevaCantidad >= 0) {
+                empanadas[index].stock = nuevaCantidad;
+                renderizarAdmin();
+            }
+        };
+
+        // Función para mostrar modal de confirmación
+        function mostrarModalConfirm(texto, accion) {
+            document.getElementById('modalConfirmTexto').innerText = texto;
+            accionConfirmar = accion;
+            document.getElementById('modalConfirm').style.display = 'flex';
+        }
+
+        // Event listeners
+        document.getElementById('guardarStock').addEventListener('click', () => {
+            mostrarModalConfirm('¿Guardar los cambios de stock?', () => {
+                guardarStock();
+            });
         });
 
-        // Inicializar carrito
-        actualizarCarrito();
+        document.getElementById('stockLleno').addEventListener('click', () => {
+            mostrarModalConfirm('¿LLENAR todo el stock a 50 unidades?', () => {
+                empanadas = empanadas.map(emp => ({ ...emp, stock: 50 }));
+                renderizarAdmin();
+            });
+        });
+
+        document.getElementById('stockCero').addEventListener('click', () => {
+            mostrarModalConfirm('¿MARCAR todo como AGOTADO?', () => {
+                empanadas = empanadas.map(emp => ({ ...emp, stock: 0 }));
+                renderizarAdmin();
+            });
+        });
+
+        document.getElementById('resetStock').addEventListener('click', () => {
+            mostrarModalConfirm('¿Restablecer stock predeterminado (50 c/u)?', () => {
+                empanadas = empanadasData.map(emp => ({ ...emp, stock: 50 }));
+                renderizarAdmin();
+            });
+        });
+
+        // Botones del modal
+        document.getElementById('confirmarSi').addEventListener('click', () => {
+            if (accionConfirmar) {
+                accionConfirmar();
+            }
+            document.getElementById('modalConfirm').style.display = 'none';
+        });
+
+        document.getElementById('confirmarNo').addEventListener('click', () => {
+            document.getElementById('modalConfirm').style.display = 'none';
+        });
+
+        // Cerrar modal al hacer clic fuera
+        document.getElementById('modalConfirm').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('modalConfirm')) {
+                document.getElementById('modalConfirm').style.display = 'none';
+            }
+        });
+
+        // Inicializar
+        cargarStockGuardado();
     </script>
 </body>
 </html>
